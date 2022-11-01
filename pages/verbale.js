@@ -1,19 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Col, Input, Row, TextArea } from "design-react-kit";
 import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
 import "typeface-titillium-web";
 import "typeface-roboto-mono";
 import "typeface-lora";
-import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
 import { getVerbale, getDocumentiVerbale, getFileVerbale } from "../services/verbali";
 import moment from 'moment'
 import MyHeader from "../components/MyHeader";
 import Footer from "../components/Footer";
+import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic';
 
 const Verbale = () => {
   const pathname = window.location.pathname;
-  let navigate = useNavigate();
+  const router = useRouter()
+
+  const Alert = dynamic(() => import('design-react-kit').then((module) => module.Alert), {
+    ssr: false,
+  });
+  const Button = dynamic(() => import('design-react-kit').then((module) => module.Button), {
+    ssr: false,
+  });
+  const Col = dynamic(() => import('design-react-kit').then((module) => module.Col), {
+    ssr: false,
+  });
+  const Input = dynamic(() => import('design-react-kit').then((module) => module.Input), {
+    ssr: false,
+  });
+  const Row = dynamic(() => import('design-react-kit').then((module) => module.Row), {
+    ssr: false,
+  });
+  const TextArea = dynamic(() => import('design-react-kit').then((module) => module.TextArea), {
+    ssr: false,
+  });
 
   async function scaricaFile (e, documento) {
     e.preventDefault()
@@ -21,14 +40,14 @@ const Verbale = () => {
     console.log(file)
   }
 
-  const { currentPath, setCurrentPath, codiceVerbale } = useAppContext();
+  const { codiceVerbale } = useAppContext();
 
   const { amministrazione, setAmministrazione } = useState(undefined);
   const [verbale, setVerbale] = useState(undefined);
   const [documentiVerbale, setDocumentiVerbale] = useState([])
 
   useEffect(() => {
-    setCurrentPath(pathname);
+
     async function fetchData() {
       const result = await getVerbale(codiceVerbale);
       console.log(result);
@@ -45,6 +64,7 @@ const Verbale = () => {
   return (
     <div>
       <MyHeader />
+      <div className="container">
       <h3 className="my-4">Visualizzazione Verbale</h3>
       
       <div className="form-row">
@@ -525,6 +545,7 @@ const Verbale = () => {
             : ""}
           readOnly
         />
+      </div>
       </div>
     <Footer />
     </div>

@@ -1,20 +1,31 @@
 import React from "react";
-import {
-  Button,
-} from "design-react-kit";
+//import {Button} from "design-react-kit";
 import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
 import "typeface-titillium-web";
 import "typeface-roboto-mono";
 import "typeface-lora";
-import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
-import Footer from "../components/Footer";
-import MyHeader from "../components/MyHeader";
+import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
+
+const MyHeader = dynamic(() => import('../components/MyHeader'), {
+  ssr: false,
+})
+const Footer = dynamic(() => import('../components/Footer'), {
+  ssr: false,
+})
+
+const Button = dynamic(() => import('design-react-kit').then((module) => module.Button), {
+  ssr: false,
+});
+
 
 const Login = () => {
-  let navigate = useNavigate();
+
+  const router = useRouter()
+  //let navigate = useNavigate();
   function goToVerbale() {
-    navigate("/verbale");
+    router.push("/verbale");
   }
 
   const { codiceVerbale, setCodiceVerbale } = useAppContext();
