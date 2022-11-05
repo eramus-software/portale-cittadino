@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useEffect, useState } from "react";
 import packageJson from "../package.json";
 import { useAppContext } from "../context/appContext";
-import Login from './Login';
+import Login from './login';
 
 export default function Home() {
 
