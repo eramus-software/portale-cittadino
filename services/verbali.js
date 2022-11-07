@@ -1,8 +1,11 @@
-import axios from "axios";
+/*import axios from "axios";
 import { baseUrl } from "../utils/config";
 import fileDownload from "js-file-download";
+import { useAppContext } from "../context/appContext";
 
-const s = localStorage.getItem('subdomain');
+//const s = localStorage.getItem('subdomain');
+
+const {s} = useAppContext(); 
 
 export const getVerbale = async (id) => {
   const response = await axios.get(
@@ -57,4 +60,4 @@ export const getFileVerbale = async (id, name, codice) => {
   fileDownload(response.data, name);
 
   // return response.data.pipe(writer);
-};
+};*/

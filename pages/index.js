@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import packageJson from "../package.json";
 import { useAppContext } from "../context/appContext";
 import Login from './Login';
+import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
+import "typeface-titillium-web";
+import "typeface-roboto-mono";
+import "typeface-lora";
 
 export default function Home() {
 

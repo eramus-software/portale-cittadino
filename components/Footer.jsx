@@ -1,11 +1,20 @@
-import {
-    Col,
-    Container,
-    Row,
-    Icon,
-  } from "design-react-kit";
+import { Col, Container, Row,Icon} from "design-react-kit";
+import dynamic from 'next/dynamic';
 
 export default function Footer() {
+
+  /*const Col = dynamic(() => import('design-react-kit').then((module) => module.Col), {
+    ssr: false,
+  });
+  const Container = dynamic(() => import('design-react-kit').then((module) => module.Container), {
+    ssr: false,
+  });
+  const Row = dynamic(() => import('design-react-kit').then((module) => module.Row), {
+    ssr: false,
+  });
+  const Icon = dynamic(() => import('design-react-kit').then((module) => module.Icon), {
+    ssr: false,
+  });*/
 
   const s = localStorage.getItem('subdomain');
     return (

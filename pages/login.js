@@ -1,5 +1,4 @@
 import React from "react";
-//import {Button} from "design-react-kit";
 import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
 import "typeface-titillium-web";
 import "typeface-roboto-mono";
@@ -7,6 +6,9 @@ import "typeface-lora";
 import { useAppContext } from "../context/appContext";
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
+//import {Button } from 'design-react-kit'
+//import {MyHeader} from '../components/MyHeader'
+//import {Footer} from '../components/Footer'
 
 const MyHeader = dynamic(() => import('../components/MyHeader'), {
   ssr: false,
@@ -15,9 +17,11 @@ const Footer = dynamic(() => import('../components/Footer'), {
   ssr: false,
 })
 
-const Button = dynamic(() => import('design-react-kit').then((module) => module.Button), {
-  ssr: false,
-});
+const MyButton = dynamic(() =>
+  import('../components/MyButton'), {
+    ssr: false,
+  }
+)
 
 
 const Login = () => {
@@ -32,7 +36,6 @@ const Login = () => {
 
   const handleChange = (e) => {
     const value = e.currentTarget.value;
-    const name = e.currentTarget.name;
 
     setCodiceVerbale(value);
   };
@@ -54,9 +57,9 @@ const Login = () => {
             onChange={handleChange}
           />
 
-          <Button onClick={goToVerbale} type="submit" color="primary">
-            Invia
-          </Button>
+          <MyButton onClick={goToVerbale} type="submit" color="primary" title={"Invia"}>
+            
+          </MyButton>
         </div>
       </section>
       <Footer />
