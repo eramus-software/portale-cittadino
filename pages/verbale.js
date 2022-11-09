@@ -619,7 +619,7 @@ const Verbale = () => {
             label="Data Immatricolazione"
             id="Data Immatricolazione"
             wrapperClass="col"
-            value={
+            value={ verbale &&
               verbale.dataimmatricolazione
                 ? moment(verbale.dataimmatricolazione).format("DD-MM-YYYY").replace(/-/g,"/")
                 : ""
@@ -631,7 +631,7 @@ const Verbale = () => {
             label="Data Scadenza Revisione"
             id="Data Scadenza Revisione"
             wrapperClass="col"
-            value={
+            value={ verbale &&
               verbale.datarevisione
                 ? moment(verbale.datarevisione).format("DD-MM-YYYY").replace(/-/g,"/")
                 : ""
@@ -643,7 +643,7 @@ const Verbale = () => {
             label="Data Scadenza Assicurazione"
             id="Data Scadenza Assicurazione"
             wrapperClass="col"
-            value={
+            value={ verbale &&
               verbale.dataassicurazione
                 ? moment(verbale.dataassicurazione).format("DD-MM-YYYY").replace(/-/g,"/")
                 : ""
