@@ -210,14 +210,6 @@ const Verbale = () => {
             value={verbale ? verbale.blocchettario.serie : ""}
             
           />
-          <MyInput
-            type="text"
-            label="Mancata contestazione"
-            id="Mancata contestazione"
-            wrapperClass="col"
-            value={verbale ? verbale.blocchettario.mancatacontestazione : ""}
-            
-          />
         </div>
         <div className="form-row">
           <MyInput
@@ -291,7 +283,7 @@ const Verbale = () => {
                 wrapperClass="col"
                 value={
                   verbale && verbale.proprietario
-                    ? verbale.proprietario.data_nascita
+                    ? verbale.proprietario.data_nascita.replace(/-/g,"/").split("/").reverse().join("/")
                     : ""
                 }
                 
@@ -337,7 +329,7 @@ const Verbale = () => {
                 id="Data di nascita"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.tutore ? verbale.tutore.data_nascita : ""
+                  verbale && verbale.tutore ? verbale.tutore.data_nascita.replace(/-/g,"/").split("/").reverse().join("/"): ""
                 }
                 
               />
@@ -385,7 +377,7 @@ const Verbale = () => {
                 wrapperClass="col"
                 value={
                   verbale && verbale.trasgressore
-                    ? verbale.trasgressore.data_nascita
+                    ? verbale.trasgressore.data_nascita.replace(/-/g,"/").split("/").reverse().join("/")
                     : ""
                 }
                 
@@ -445,15 +437,14 @@ const Verbale = () => {
                   label="Tot. Imp. Ruolo"
                   id="Tot. Imp. Ruolo"
                   wrapperClass="col"
-                  value={
-                    verbale
+                  value={`€ ${verbale
                       ? verbale.violazioni
                           .filter((item) => item.importoruolo)
                           .reduce(
                             (partialSum, a) => partialSum + a.importoruolo,
                             0
-                          )
-                      : ""
+                          ).toFixed(2).replace(".",",")
+                      : ""}`
                   }
                   
                 />
@@ -469,7 +460,7 @@ const Verbale = () => {
                           .reduce(
                             (partialSum, a) => partialSum + a.importoridotto,
                             0
-                          )
+                          ).toFixed(2).replace(".",",")
                       : ""
                   }`}
                   
@@ -485,7 +476,7 @@ const Verbale = () => {
             id="Data Presentazione Documenti"
             wrapperClass="col"
             value={
-              verbale ? verbale.data_presentazione_documenti || "no data" : ""
+              verbale ? moment(verbale.data_presentazione_documenti).format("DD-MM-YYYY").replace(/-/g,"/") || "no data" : ""
             }
             
           />
@@ -501,7 +492,7 @@ const Verbale = () => {
                   id="Data Pagamento"
                   wrapperClass="col"
                   value={
-                    moment(item.data_pagamento).format("DD-MM-YYYY") ||
+                    moment(item.data_pagamento).format("DD-MM-YYYY").replace(/-/g,"/") ||
                     "no data"
                   }
                   
@@ -511,7 +502,7 @@ const Verbale = () => {
                   label="Importo Pagato"
                   id="Importo Pagato"
                   wrapperClass="col"
-                  value={`€ ${item.importo_pagato || "no data"}`}
+                  value={`€ ${item.importo_pagato.toFixed(2).replace(".",",") || "no data"}`}
                   
                 />
                 <MyInput
@@ -527,7 +518,7 @@ const Verbale = () => {
                   label="Estremi Pagamento"
                   id="Estremi Pagamento"
                   wrapperClass="col"
-                  value={item.estremi_pagamento || "no dati"}
+                  value={item.estremi_pagamento || ""}
                   
                 />
               </div>
@@ -549,7 +540,7 @@ const Verbale = () => {
                     id="Data Notifica"
                     wrapperClass="col"
                     value={
-                      moment(item.data_notifica).format("DD-MM-YYYY") ||
+                      moment(item.data_notifica).format("DD-MM-YYYY").replace(/-/g,"/") ||
                       "no data"
                     }
                     
@@ -589,9 +580,9 @@ const Verbale = () => {
                     label="Data Ricorso"
                     id="Data Ricorso"
                     wrapperClass="col"
-                    value={
-                      moment(item.data_inserimento).format("DD-MM-YYYY") ||
-                      "no data"
+                    value={ item.data_inserimento ?
+                      moment(item.data_inserimento).format("DD-MM-YYYY").replace(/-/g,"/") :
+                      ""
                     }
                     
                   />
@@ -600,7 +591,7 @@ const Verbale = () => {
                     label="Ente"
                     id="Ente"
                     wrapperClass="col"
-                    value={item.ente || "no data"}
+                    value={item.ente || ""}
                     
                   />
                   <MyInput
@@ -608,7 +599,7 @@ const Verbale = () => {
                     label="Soggetto"
                     id="Soggetto"
                     wrapperClass="col"
-                    value={item.soggetto_id || "no data"}
+                    value={item.soggetto_id || ""}
                     
                   />
                 </div>
@@ -629,9 +620,8 @@ const Verbale = () => {
             id="Data Immatricolazione"
             wrapperClass="col"
             value={
-              verbale
-                ? moment(verbale.dataimmatricolazione).format("DD-MM-YYYY") ||
-                  "no data"
+              verbale.dataimmatricolazione
+                ? moment(verbale.dataimmatricolazione).format("DD-MM-YYYY").replace(/-/g,"/")
                 : ""
             }
             
@@ -642,9 +632,8 @@ const Verbale = () => {
             id="Data Scadenza Revisione"
             wrapperClass="col"
             value={
-              verbale
-                ? moment(verbale.datarevisione).format("DD-MM-YYYY") ||
-                  "no data"
+              verbale.datarevisione
+                ? moment(verbale.datarevisione).format("DD-MM-YYYY").replace(/-/g,"/")
                 : ""
             }
             
@@ -655,9 +644,8 @@ const Verbale = () => {
             id="Data Scadenza Assicurazione"
             wrapperClass="col"
             value={
-              verbale
-                ? moment(verbale.dataassicurazione).format("DD-MM-YYYY") ||
-                  "no data"
+              verbale.dataassicurazione
+                ? moment(verbale.dataassicurazione).format("DD-MM-YYYY").replace(/-/g,"/")
                 : ""
             }
             
