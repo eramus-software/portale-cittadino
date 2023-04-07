@@ -13,30 +13,31 @@ import fileDownload from "js-file-download";
 //import {Alert, Button, Col, Input, Row, TextArea} from 'design-react-kit'
 
 const Verbale = () => {
+  const MyAlert = dynamic(() => import("../components/MyAlert"), {
+    ssr: false,
+  });
 
-  const MyAlert = dynamic(() => import("../components/MyAlert"),
-  { ssr: false });
+  const MyHeader = dynamic(() => import("../components/MyHeader"), {
+    ssr: false,
+  });
 
-  const MyHeader = dynamic(() => import("../components/MyHeader"),
-  { ssr: false });
+  const Footer = dynamic(() => import("../components/Footer"), { ssr: false });
 
-  const Footer = dynamic(() => import("../components/Footer"),
-  { ssr: false });
+  const MyButton = dynamic(() => import("../components/MyButton"), {
+    ssr: false,
+  });
 
-  const MyButton = dynamic(() => import("../components/MyButton"),
-  { ssr: false });
+  const MyCol = dynamic(() => import("../components/MyCol"), { ssr: false });
 
-  const MyCol = dynamic(() => import("../components/MyCol"),
-  { ssr: false });
+  const MyInput = dynamic(() => import("../components/MyInput"), {
+    ssr: false,
+  });
 
-  const MyInput = dynamic(() => import("../components/MyInput"),
-  { ssr: false });
+  const MyRow = dynamic(() => import("../components/MyRow"), { ssr: false });
 
-  const MyRow = dynamic(() => import("../components/MyRow"),
-  { ssr: false });
-
-  const MyTextArea = dynamic(() => import("../components/MyTextArea"),
-  { ssr: false });
+  const MyTextArea = dynamic(() => import("../components/MyTextArea"), {
+    ssr: false,
+  });
 
   /*const Alert = dynamic(() => import('design-react-kit').then((module) => module.Alert), {
     ssr: false,
@@ -73,35 +74,27 @@ const Verbale = () => {
   );*/
 
   const getVerbale = async (id) => {
-    const response = await axios.get(
-      baseUrl() + `/verbali/${id}`,
-      {
-        headers: {
-          "X-Api-Key": s, //the token is a variable which holds the token
-        },
-      }
-    );
+    const response = await axios.get(baseUrl() + `/verbali/${id}`, {
+      headers: {
+        "X-Api-Key": s, //the token is a variable which holds the token
+      },
+    });
     return response.data;
   };
 
   const getDocumentiVerbale = async (id) => {
-    const response = await axios.get(
-      baseUrl() +
-        `/verbali/${id}/documents`,
-      {
-        headers: {
-          "X-Api-Key": s, //the token is a variable which holds the token
-        },
-      }
-    );
+    const response = await axios.get(baseUrl() + `/verbali/${id}/documents`, {
+      headers: {
+        "X-Api-Key": s, //the token is a variable which holds the token
+      },
+    });
     return response.data;
   };
 
   const getFileVerbale = async (id, name, codice) => {
     // const writer = createWriteStream("download");
     const response = await axios.get(
-      baseUrl() +
-        `/documents/${id}?codiceunivoco=${codice}`,
+      baseUrl() + `/documents/${id}?codiceunivoco=${codice}`,
       {
         headers: {
           "X-Api-Key": s, //the token is a variable which holds the token
@@ -110,7 +103,7 @@ const Verbale = () => {
       }
     );
     fileDownload(response.data, name);
-  
+
     // return response.data.pipe(writer);
   };
 
@@ -158,7 +151,6 @@ const Verbale = () => {
               label="Protocollo"
               id="formProtocollo"
               value={verbale ? verbale.protocollo : ""}
-              
             />
           </div>
           <div className="col col-md-6">
@@ -189,7 +181,6 @@ const Verbale = () => {
             id="formAmministrazione verbale"
             value={amministrazione}
             wrapperClass="col col-md-6"
-            
           />
         </div>
         <h6 style={{ marginBottom: 20 }}>Informazioni blocchettario</h6>
@@ -200,7 +191,6 @@ const Verbale = () => {
             id="Numero"
             wrapperClass="col"
             value={verbale ? verbale.numeroserie : ""}
-            
           />
           <MyInput
             type="text"
@@ -208,7 +198,6 @@ const Verbale = () => {
             id="Serie"
             wrapperClass="col"
             value={verbale ? verbale.blocchettario.serie : ""}
-            
           />
         </div>
         <div className="form-row">
@@ -218,7 +207,6 @@ const Verbale = () => {
             id="Descrizione"
             wrapperClass="col"
             value={verbale ? verbale.blocchettario.descrizione : ""}
-            
           />
         </div>
         <h6 style={{ marginBottom: 20 }}>Informazioni veicolo</h6>
@@ -229,7 +217,6 @@ const Verbale = () => {
             id="Targa"
             wrapperClass="col"
             value={verbale ? verbale.targaveicolo : ""}
-            
           />
           <MyInput
             type="text"
@@ -237,7 +224,6 @@ const Verbale = () => {
             id="Tipo targa"
             wrapperClass="col"
             value={verbale ? verbale.tipotarga : ""}
-            
           />
           <MyInput
             type="text"
@@ -245,7 +231,6 @@ const Verbale = () => {
             id="Tipo veicolo"
             wrapperClass="col"
             value={verbale ? verbale.tipoveicolo : ""}
-            
           />
         </div>
         {verbale && verbale.proprietario ? (
@@ -260,9 +245,8 @@ const Verbale = () => {
                 value={
                   verbale && verbale.proprietario
                     ? `${verbale.proprietario.nome} ${verbale.proprietario.cognome}`
-                    : ""
+                    : `${verbale.proprietario.ragione_sociale}`
                 }
-                
               />
               <MyInput
                 type="text"
@@ -274,7 +258,6 @@ const Verbale = () => {
                     ? verbale.proprietario.codfiscale
                     : ""
                 }
-                
               />
               <MyInput
                 type="text"
@@ -283,10 +266,13 @@ const Verbale = () => {
                 wrapperClass="col"
                 value={
                   verbale && verbale.proprietario
-                    ? verbale.proprietario.data_nascita.replace(/-/g,"/").split("/").reverse().join("/")
+                    ? verbale.proprietario.data_nascita
+                        .replace(/-/g, "/")
+                        .split("/")
+                        .reverse()
+                        .join("/")
                     : ""
                 }
-                
               />
             </div>{" "}
           </div>
@@ -309,9 +295,8 @@ const Verbale = () => {
                 value={
                   verbale && verbale.tutore
                     ? `${verbale.tutore.nome} ${verbale.tutore.cognome}`
-                    : ""
+                    : `${verbale.tutore.ragione_sociale}`
                 }
-                
               />
               <MyInput
                 type="text"
@@ -321,7 +306,6 @@ const Verbale = () => {
                 value={
                   verbale && verbale.tutore ? verbale.tutore.codfiscale : ""
                 }
-                
               />
               <MyInput
                 type="text"
@@ -329,9 +313,14 @@ const Verbale = () => {
                 id="Data di nascita"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.tutore ? verbale.tutore.data_nascita.replace(/-/g,"/").split("/").reverse().join("/"): ""
+                  verbale && verbale.tutore
+                    ? verbale.tutore.data_nascita
+                        .replace(/-/g, "/")
+                        .split("/")
+                        .reverse()
+                        .join("/")
+                    : ""
                 }
-                
               />
             </div>{" "}
           </div>
@@ -354,9 +343,8 @@ const Verbale = () => {
                 value={
                   verbale && verbale.trasgressore
                     ? `${verbale.trasgressore.nome} ${verbale.trasgressore.cognome}`
-                    : ""
+                    : `${verbale.trasgressore.ragione_sociale}`
                 }
-                
               />
               <MyInput
                 type="text"
@@ -368,7 +356,6 @@ const Verbale = () => {
                     ? verbale.trasgressore.codfiscale
                     : ""
                 }
-                
               />
               <MyInput
                 type="text"
@@ -377,10 +364,13 @@ const Verbale = () => {
                 wrapperClass="col"
                 value={
                   verbale && verbale.trasgressore
-                    ? verbale.trasgressore.data_nascita.replace(/-/g,"/").split("/").reverse().join("/")
+                    ? verbale.trasgressore.data_nascita
+                        .replace(/-/g, "/")
+                        .split("/")
+                        .reverse()
+                        .join("/")
                     : ""
                 }
-                
               />
             </div>{" "}
           </div>
@@ -401,7 +391,6 @@ const Verbale = () => {
                     label="Descrizione"
                     placeholder="Descrizione"
                     value={item.descrizione}
-                    
                   />
                 </MyCol>
                 <MyCol>
@@ -411,7 +400,6 @@ const Verbale = () => {
                     id="Imp. Ridotto"
                     wrapperClass="col"
                     value={`€ ${item.importoridotto}`}
-                    
                   />
                   <MyInput
                     type="text"
@@ -419,7 +407,6 @@ const Verbale = () => {
                     id="Imp. Ruoli"
                     wrapperClass="col"
                     value={`€ ${item.importoruolo}`}
-                    
                   />
                   <MyInput
                     type="text"
@@ -427,7 +414,6 @@ const Verbale = () => {
                     id="Punti"
                     wrapperClass="col"
                     value={item.punti || "no punti"}
-                    
                   />
                 </MyCol>
               </MyRow>
@@ -437,16 +423,18 @@ const Verbale = () => {
                   label="Tot. Imp. Ruolo"
                   id="Tot. Imp. Ruolo"
                   wrapperClass="col"
-                  value={`€ ${verbale
+                  value={`€ ${
+                    verbale
                       ? verbale.violazioni
                           .filter((item) => item.importoruolo)
                           .reduce(
                             (partialSum, a) => partialSum + a.importoruolo,
                             0
-                          ).toFixed(2).replace(".",",")
-                      : ""}`
-                  }
-                  
+                          )
+                          .toFixed(2)
+                          .replace(".", ",")
+                      : ""
+                  }`}
                 />
                 <MyInput
                   type="text"
@@ -460,10 +448,11 @@ const Verbale = () => {
                           .reduce(
                             (partialSum, a) => partialSum + a.importoridotto,
                             0
-                          ).toFixed(2).replace(".",",")
+                          )
+                          .toFixed(2)
+                          .replace(".", ",")
                       : ""
                   }`}
-                  
                 />
               </div>
             </div>
@@ -476,9 +465,12 @@ const Verbale = () => {
             id="Data Presentazione Documenti"
             wrapperClass="col"
             value={
-              verbale ? moment(verbale.data_presentazione_documenti).format("DD-MM-YYYY").replace(/-/g,"/") || "no data" : ""
+              verbale
+                ? moment(verbale.data_presentazione_documenti)
+                    .format("DD-MM-YYYY")
+                    .replace(/-/g, "/") || "no data"
+                : ""
             }
-            
           />
         </div>
         {verbale && verbale.pagamenti && verbale.pagamenti.length > 0 ? (
@@ -492,18 +484,20 @@ const Verbale = () => {
                   id="Data Pagamento"
                   wrapperClass="col"
                   value={
-                    moment(item.data_pagamento).format("DD-MM-YYYY").replace(/-/g,"/") ||
-                    "no data"
+                    moment(item.data_pagamento)
+                      .format("DD-MM-YYYY")
+                      .replace(/-/g, "/") || "no data"
                   }
-                  
                 />
                 <MyInput
                   type="text"
                   label="Importo Pagato"
                   id="Importo Pagato"
                   wrapperClass="col"
-                  value={`€ ${item.importo_pagato.toFixed(2).replace(".",",") || "no data"}`}
-                  
+                  value={`€ ${
+                    item.importo_pagato.toFixed(2).replace(".", ",") ||
+                    "no data"
+                  }`}
                 />
                 <MyInput
                   type="text"
@@ -511,7 +505,6 @@ const Verbale = () => {
                   id="Metodo di Pagamento"
                   wrapperClass="col"
                   value={item.metodo_pagamento || "no data"}
-                  
                 />
                 <MyInput
                   type="text"
@@ -519,7 +512,6 @@ const Verbale = () => {
                   id="Estremi Pagamento"
                   wrapperClass="col"
                   value={item.estremi_pagamento || ""}
-                  
                 />
               </div>
             </div>
@@ -540,10 +532,10 @@ const Verbale = () => {
                     id="Data Notifica"
                     wrapperClass="col"
                     value={
-                      moment(item.data_notifica).format("DD-MM-YYYY").replace(/-/g,"/") ||
-                      "no data"
+                      moment(item.data_notifica)
+                        .format("DD-MM-YYYY")
+                        .replace(/-/g, "/") || "no data"
                     }
-                    
                   />
                   <MyInput
                     type="text"
@@ -551,7 +543,6 @@ const Verbale = () => {
                     id="Tipo"
                     wrapperClass="col"
                     value={item.tipo_notifica || "no data"}
-                    
                   />
                   <MyInput
                     type="text"
@@ -559,7 +550,6 @@ const Verbale = () => {
                     id="Soggetto"
                     wrapperClass="col"
                     value={item.tipo_anagrafica || "no data"}
-                    
                   />
                 </div>
               </div>
@@ -580,11 +570,13 @@ const Verbale = () => {
                     label="Data Ricorso"
                     id="Data Ricorso"
                     wrapperClass="col"
-                    value={ item.data_inserimento ?
-                      moment(item.data_inserimento).format("DD-MM-YYYY").replace(/-/g,"/") :
-                      ""
+                    value={
+                      item.data_inserimento
+                        ? moment(item.data_inserimento)
+                            .format("DD-MM-YYYY")
+                            .replace(/-/g, "/")
+                        : ""
                     }
-                    
                   />
                   <MyInput
                     type="text"
@@ -592,7 +584,6 @@ const Verbale = () => {
                     id="Ente"
                     wrapperClass="col"
                     value={item.ente || ""}
-                    
                   />
                   <MyInput
                     type="text"
@@ -600,7 +591,6 @@ const Verbale = () => {
                     id="Soggetto"
                     wrapperClass="col"
                     value={item.soggetto_id || ""}
-                    
                   />
                 </div>
               </div>
@@ -619,36 +609,39 @@ const Verbale = () => {
             label="Data Immatricolazione"
             id="Data Immatricolazione"
             wrapperClass="col"
-            value={ verbale &&
-              verbale.dataimmatricolazione
-                ? moment(verbale.dataimmatricolazione).format("DD-MM-YYYY").replace(/-/g,"/")
+            value={
+              verbale && verbale.dataimmatricolazione
+                ? moment(verbale.dataimmatricolazione)
+                    .format("DD-MM-YYYY")
+                    .replace(/-/g, "/")
                 : ""
             }
-            
           />
           <MyInput
             type="text"
             label="Data Scadenza Revisione"
             id="Data Scadenza Revisione"
             wrapperClass="col"
-            value={ verbale &&
-              verbale.datarevisione
-                ? moment(verbale.datarevisione).format("DD-MM-YYYY").replace(/-/g,"/")
+            value={
+              verbale && verbale.datarevisione
+                ? moment(verbale.datarevisione)
+                    .format("DD-MM-YYYY")
+                    .replace(/-/g, "/")
                 : ""
             }
-            
           />
           <MyInput
             type="text"
             label="Data Scadenza Assicurazione"
             id="Data Scadenza Assicurazione"
             wrapperClass="col"
-            value={ verbale &&
-              verbale.dataassicurazione
-                ? moment(verbale.dataassicurazione).format("DD-MM-YYYY").replace(/-/g,"/")
+            value={
+              verbale && verbale.dataassicurazione
+                ? moment(verbale.dataassicurazione)
+                    .format("DD-MM-YYYY")
+                    .replace(/-/g, "/")
                 : ""
             }
-            
           />
         </div>
       </div>
