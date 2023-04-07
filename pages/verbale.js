@@ -243,7 +243,10 @@ const Verbale = () => {
                 id="Nome e cognome"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.proprietario
+                  verbale &&
+                  verbale.proprietario &&
+                  verbale.proprietario.nome &&
+                  verbale.proprietario.cognome
                     ? `${verbale.proprietario.nome} ${verbale.proprietario.cognome}`
                     : `${verbale.proprietario.ragione_sociale}`
                 }
@@ -254,7 +257,9 @@ const Verbale = () => {
                 id="Codice fiscale"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.proprietario
+                  verbale &&
+                  verbale.proprietario &&
+                  verbale.proprietario.codfiscale
                     ? verbale.proprietario.codfiscale
                     : ""
                 }
@@ -265,7 +270,9 @@ const Verbale = () => {
                 id="Data di nascita"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.proprietario
+                  verbale &&
+                  verbale.proprietario &&
+                  verbale.proprietario.data_nascita
                     ? verbale.proprietario.data_nascita
                         .replace(/-/g, "/")
                         .split("/")
@@ -293,7 +300,10 @@ const Verbale = () => {
                 id="Nome e cognome"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.tutore
+                  verbale &&
+                  verbale.tutore &&
+                  verbale.tutore.nome &&
+                  verbale.tutore.cognome
                     ? `${verbale.tutore.nome} ${verbale.tutore.cognome}`
                     : `${verbale.tutore.ragione_sociale}`
                 }
@@ -304,7 +314,9 @@ const Verbale = () => {
                 id="Codice fiscale"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.tutore ? verbale.tutore.codfiscale : ""
+                  verbale && verbale.tutore && verbale.tutore.codfiscale
+                    ? verbale.tutore.codfiscale
+                    : ""
                 }
               />
               <MyInput
@@ -313,7 +325,7 @@ const Verbale = () => {
                 id="Data di nascita"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.tutore
+                  verbale && verbale.tutore && verbale.tutore.data_nascita
                     ? verbale.tutore.data_nascita
                         .replace(/-/g, "/")
                         .split("/")
@@ -341,7 +353,10 @@ const Verbale = () => {
                 id="Nome e cognome"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.trasgressore
+                  verbale &&
+                  verbale.trasgressore &&
+                  verbale.trasgressore.nome &&
+                  verbale.trasgressore.cognome
                     ? `${verbale.trasgressore.nome} ${verbale.trasgressore.cognome}`
                     : `${verbale.trasgressore.ragione_sociale}`
                 }
@@ -352,7 +367,9 @@ const Verbale = () => {
                 id="Codice fiscale"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.trasgressore
+                  verbale &&
+                  verbale.trasgressore &&
+                  verbale.trasgressore.codfiscale
                     ? verbale.trasgressore.codfiscale
                     : ""
                 }
@@ -363,7 +380,9 @@ const Verbale = () => {
                 id="Data di nascita"
                 wrapperClass="col"
                 value={
-                  verbale && verbale.trasgressore
+                  verbale &&
+                  verbale.trasgressore &&
+                  verbale.trasgressore.data_nascita
                     ? verbale.trasgressore.data_nascita
                         .replace(/-/g, "/")
                         .split("/")
