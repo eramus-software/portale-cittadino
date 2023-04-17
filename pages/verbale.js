@@ -94,7 +94,7 @@ const Verbale = () => {
   const getFileVerbale = async (id, name, codice) => {
     // const writer = createWriteStream("download");
     const response = await axios.get(
-      baseUrl() + `/documents/${id}?codiceunivoco=${codice}`,
+      baseUrl() + `/documents/${id}?codiceunivoco=${codice}&file=${true}`,
       {
         headers: {
           "X-Api-Key": s, //the token is a variable which holds the token
