@@ -10,6 +10,8 @@ import dynamic from "next/dynamic";
 import axios from "axios";
 import { baseUrl } from "../utils/config";
 import fileDownload from "js-file-download";
+import Link from "next/link";
+
 //import {Alert, Button, Col, Input, Row, TextArea} from 'design-react-kit'
 
 const Verbale = () => {
@@ -137,11 +139,32 @@ const Verbale = () => {
 
   console.log(codiceVerbale);
 
+  function openModuloDatiConducente(e) {
+    e.preventDefault();
+    window.open(
+      `http://localhost:3001/posts/compilazioneistanze?comune=${localStorage.getItem(
+        "subdomain"
+      )}`
+    );
+  }
+
   return (
     <div>
       <MyHeader />
       <div className="container">
-        <h3 className="my-4">Visualizzazione Verbale</h3>
+        <div className="d-flex my-4 justify-content-between">
+          <div>
+            <h3 className="">Visualizzazione Verbale</h3>
+          </div>
+          <div>
+            <MyButton
+              onClick={(e) => openModuloDatiConducente(e)}
+              type="button"
+              color="primary"
+              title={"Compila Modulo dati conducente"}
+            ></MyButton>
+          </div>
+        </div>
 
         <div className="form-row">
           <div className="col col-md-6">
@@ -620,7 +643,7 @@ const Verbale = () => {
         )}
 
         <h6 style={{ marginBottom: 20 }}>
-          Ricorso-immatricolazione-revisione-assicurazione
+          Immatricolazione - Revisione - Assicurazione
         </h6>
         <div className="form-row">
           <MyInput
