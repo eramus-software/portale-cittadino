@@ -7,7 +7,7 @@ export default function MyButton(props) {
   );*/
 
   return (
-    <Button onClick={props.onClick} type={props.type} color={props.color}>
+    <Button className={props.className} onClick={props.onClick} type={props.type} color={props.color} >
       {props.title}
     </Button>
   );
