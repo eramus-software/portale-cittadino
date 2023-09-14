@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useAppContext } from "../context/appContext";
 /*import {
   getVerbale,
@@ -38,6 +38,10 @@ const Verbale = () => {
   const MyRow = dynamic(() => import("../components/MyRow"), { ssr: false });
 
   const MyTextArea = dynamic(() => import("../components/MyTextArea"), {
+    ssr: false,
+  });
+
+  const MyPopover = dynamic(() => import("../components/MyPopover"), {
     ssr: false,
   });
 
@@ -148,6 +152,18 @@ const Verbale = () => {
     );
   }
 
+  function openPagopaPagamenti(e) {
+    e.preventDefault();
+    window.open(`https://checkout.pagopa.it/`);
+  }
+
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const togglePopover = () => {
+    setPopoverOpen(!popoverOpen);
+  };
+
+  const targetRef = useRef(null);
+
   return (
     <div>
       <MyHeader />
@@ -156,6 +172,33 @@ const Verbale = () => {
           <div>
             <h3 className="">Visualizzazione Verbale</h3>
           </div>
+        </div>
+
+        <div className="d-flex my-4 justify-content-between">
+          <div>
+            <MyButton
+              onClick={(e) => openPagopaPagamenti(e)}
+              type="button"
+              color="outline-primary"
+              title={"Paga con PagoPA"}
+            ></MyButton>
+          </div>
+          <div>
+            {/* <MyButton
+              //onClick={(e) => openModuloDatiConducente(e)}
+              onClick={() => togglePopover}
+              type="button"
+              color="warning"
+              title={"Effettua Ricorso SANA"}
+            ></MyButton> */}
+
+            <MyPopover
+              type="button"
+              color="warning"
+              title={"Effettua Ricorso SANA"}
+            ></MyPopover>
+          </div>
+
           <div>
             <MyButton
               onClick={(e) => openModuloDatiConducente(e)}
@@ -166,9 +209,9 @@ const Verbale = () => {
           </div>
         </div>
 
-        <div className="form-row">
+        <div className="form-row" style={{ height: "100px" }}>
           <div className="col col-md-6">
-            <h6 style={{ marginBottom: 20 }}>Protocollo</h6>
+            <h6 style={{ marginBottom: 15 }}>Protocollo</h6>
             <MyInput
               type="text"
               label="Protocollo"
@@ -177,7 +220,7 @@ const Verbale = () => {
             />
           </div>
           <div className="col col-md-6">
-            <h6 style={{ marginBottom: 20 }}>Documentale</h6>
+            <h6 style={{ marginBottom: 15 }}>Documentale</h6>
             {documentiVerbale.length > 0 ? (
               documentiVerbale.map((item) => (
                 <MyButton
@@ -196,8 +239,8 @@ const Verbale = () => {
             )}
           </div>
         </div>
-        <h6 style={{ marginBottom: 20 }}>Informazioni zona</h6>
-        <div className="form-row">
+        <h6 style={{ marginBottom: 10 }}>Informazioni zona</h6>
+        <div className="form-row" style={{ height: "80px" }}>
           <MyInput
             type="text"
             label="Amministrazione verbale"
@@ -206,8 +249,8 @@ const Verbale = () => {
             wrapperClass="col col-md-6"
           />
         </div>
-        <h6 style={{ marginBottom: 20 }}>Informazioni blocchettario</h6>
-        <div className="form-row">
+        <h6 style={{ marginBottom: 15 }}>Informazioni blocchettario</h6>
+        <div className="form-row" style={{ height: "100px" }}>
           <MyInput
             type="text"
             label="Numero"
@@ -223,7 +266,7 @@ const Verbale = () => {
             value={verbale ? verbale.blocchettario.serie : ""}
           />
         </div>
-        <div className="form-row">
+        <div className="form-row" style={{ height: "90px" }}>
           <MyInput
             type="text"
             label="Descrizione"
@@ -232,8 +275,8 @@ const Verbale = () => {
             value={verbale ? verbale.blocchettario.descrizione : ""}
           />
         </div>
-        <h6 style={{ marginBottom: 20 }}>Informazioni veicolo</h6>
-        <div className="form-row">
+        <h6 style={{ marginBottom: 15 }}>Informazioni veicolo</h6>
+        <div className="form-row" style={{ height: "90px" }}>
           <MyInput
             type="text"
             label="Targa"
@@ -258,8 +301,8 @@ const Verbale = () => {
         </div>
         {verbale && verbale.proprietario ? (
           <div>
-            <h6 style={{ marginBottom: 20 }}>Informazioni proprietario</h6>
-            <div className="form-row">
+            <h6 style={{ marginBottom: 15 }}>Informazioni proprietario</h6>
+            <div className="form-row" style={{ height: "100px" }}>
               <MyInput
                 type="text"
                 label="Nome e cognome"
@@ -315,8 +358,8 @@ const Verbale = () => {
 
         {verbale && verbale.tutore ? (
           <div>
-            <h6 style={{ marginBottom: 20 }}>Informazioni tutore</h6>
-            <div className="form-row">
+            <h6 style={{ marginBottom: 15 }}>Informazioni tutore</h6>
+            <div className="form-row" style={{ height: "100px" }}>
               <MyInput
                 type="text"
                 label="Nome e cognome"
@@ -368,8 +411,8 @@ const Verbale = () => {
 
         {verbale && verbale.trasgressore ? (
           <div>
-            <h6 style={{ marginBottom: 20 }}>Informazioni trasgressore</h6>
-            <div className="form-row">
+            <h6 style={{ marginBottom: 15 }}>Informazioni trasgressore</h6>
+            <div className="form-row" style={{ height: "90px" }}>
               <MyInput
                 type="text"
                 label="Nome e cognome"
@@ -425,7 +468,7 @@ const Verbale = () => {
         {verbale &&
           verbale.violazioni.map((item) => (
             <div>
-              <h6 style={{ marginBottom: 20 }}>Informazioni violazioni</h6>
+              <h6 style={{ marginBottom: 15 }}>Informazioni violazioni</h6>
               <MyRow>
                 <MyCol>
                   <MyTextArea
@@ -459,7 +502,7 @@ const Verbale = () => {
                   />
                 </MyCol>
               </MyRow>
-              <div className="form-row">
+              <div className="form-row" style={{ height: "100px" }}>
                 <MyInput
                   type="text"
                   label="Tot. Imp. Ruolo"
@@ -499,8 +542,8 @@ const Verbale = () => {
               </div>
             </div>
           ))}
-        <h6 style={{ marginBottom: 20 }}>Comunicazioni dati conducente</h6>
-        <div className="form-row">
+        <h6 style={{ marginBottom: 15 }}>Comunicazioni dati conducente</h6>
+        <div className="form-row" style={{ height: "100px" }}>
           <MyInput
             type="text"
             label="Data Presentazione Documenti"
@@ -518,8 +561,8 @@ const Verbale = () => {
         {verbale && verbale.pagamenti && verbale.pagamenti.length > 0 ? (
           verbale.pagamenti.map((item) => (
             <div>
-              <h6 style={{ marginBottom: 20 }}>Pagamento</h6>
-              <div className="form-row">
+              <h6 style={{ marginBottom: 15 }}>Pagamento</h6>
+              <div className="form-row" style={{ height: "100px" }}>
                 <MyInput
                   type="text"
                   label="Data Pagamento"
@@ -566,8 +609,8 @@ const Verbale = () => {
           <div>
             {verbale.notifiche.map((item) => (
               <div>
-                <h6 style={{ marginBottom: 20 }}>Notifica</h6>
-                <div className="form-row">
+                <h6 style={{ marginBottom: 15 }}>Notifica</h6>
+                <div className="form-row" style={{ height: "100px" }}>
                   <MyInput
                     type="text"
                     label="Data Notifica"
@@ -605,8 +648,8 @@ const Verbale = () => {
           <div>
             {verbale.ricorsi.map((item) => (
               <div>
-                <h6 style={{ marginBottom: 20 }}>Ricorso</h6>
-                <div className="form-row">
+                <h6 style={{ marginBottom: 15 }}>Ricorso</h6>
+                <div className="form-row" style={{ height: "100px" }}>
                   <MyInput
                     type="text"
                     label="Data Ricorso"
@@ -642,10 +685,10 @@ const Verbale = () => {
           <MyAlert color="danger" title={"Non esistono Ricorsi!"}></MyAlert>
         )}
 
-        <h6 style={{ marginBottom: 20 }}>
+        <h6 style={{ marginBottom: 15 }}>
           Immatricolazione - Revisione - Assicurazione
         </h6>
-        <div className="form-row">
+        <div className="form-row" style={{ height: "100px" }}>
           <MyInput
             type="text"
             label="Data Immatricolazione"
