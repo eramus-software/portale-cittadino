@@ -181,6 +181,7 @@ const Verbale = () => {
               type="button"
               color="outline-primary"
               title={"Paga con PagoPA"}
+              disabled={false}
             ></MyButton>
           </div>
           <div>
@@ -205,6 +206,7 @@ const Verbale = () => {
               type="button"
               color="primary"
               title={"Compila Modulo dati conducente"}
+              disabled={true}
             ></MyButton>
           </div>
         </div>
@@ -228,6 +230,7 @@ const Verbale = () => {
                   type="submit"
                   color="primary"
                   title={`Scarica ${item.title}`}
+                  disabled={false}
                 ></MyButton>
               ))
             ) : (
