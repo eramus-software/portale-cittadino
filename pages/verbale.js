@@ -179,7 +179,7 @@ const Verbale = () => {
             <MyButton
               onClick={(e) => openPagopaPagamenti(e)}
               type="button"
-              color="outline-primary"
+              color="primary"
               title={"Paga con PagoPA"}
               disabled={false}
             ></MyButton>
@@ -195,7 +195,7 @@ const Verbale = () => {
 
             <MyPopover
               type="button"
-              color="warning"
+              color="secondary"
               title={"Effettua Ricorso SANA"}
             ></MyPopover>
           </div>
@@ -204,7 +204,7 @@ const Verbale = () => {
             <MyButton
               onClick={(e) => openModuloDatiConducente(e)}
               type="button"
-              color="primary"
+              color="success"
               title={"Compila Modulo dati conducente"}
               disabled={true}
             ></MyButton>
