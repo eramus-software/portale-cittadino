@@ -148,7 +148,7 @@ const Verbale = () => {
     window.open(
       `http://${localStorage.getItem(
         "subdomain"
-      )}.sportelloente.it/posts/compilazioneistanze`
+      )}.sportelloente.it/posts/compilazioneistanze?token=${codiceVerbale}`
     );
   }
 
