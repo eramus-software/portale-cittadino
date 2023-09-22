@@ -146,9 +146,9 @@ const Verbale = () => {
   function openModuloDatiConducente(e) {
     e.preventDefault();
     window.open(
-      `http://localhost:3001/posts/compilazioneistanze?comune=${localStorage.getItem(
+      `http://${localStorage.getItem(
         "subdomain"
-      )}`
+      )}.sportelloente.it/posts/compilazioneistanze`
     );
   }
 
