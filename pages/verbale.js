@@ -206,7 +206,7 @@ const Verbale = () => {
               type="button"
               color="success"
               title={"Compila Modulo dati conducente"}
-              disabled={true}
+              disabled={false}
             ></MyButton>
           </div>
         </div>
