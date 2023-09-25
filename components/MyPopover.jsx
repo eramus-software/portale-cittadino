@@ -23,12 +23,19 @@ export default function MyPopover(props){
           placement='bottom'
           target={targetRef}
           isOpen={popoverOpen}
-          toggle={togglePopover}
+          onClose={togglePopover}
+          //toggle={togglePopover}
           style={{height:"330px", width:"500px", backgroundColor:"white"}}
         >
           <PopoverHeader>
-            <Icon icon='it-help-circle' aria-hidden />
-            <h6 className="mt-2">Informazioni SANA</h6>
+            <div className="d-flex">
+              <Icon icon='it-help-circle' aria-hidden />
+              <h6 className="mt-0">Informazioni SANA</h6>
+              <a color="outline-primary" onClick={()=>setPopoverOpen(false)} style={{marginLeft:"230px"}} >
+                <Icon icon='it-close' aria-hidden  style={{ fontSize: '2rem', width: '2rem', height: '2rem' }}/>
+
+              </a>
+            </div>
           </PopoverHeader>
           <PopoverBody>
             <small>Gentile utente, attraverso il tasto di seguito indicato potrà trasmettere alla prefettura il ricorso riferito alla sanzione amministrativa notificata.</small>

@@ -128,7 +128,7 @@ const Verbale = () => {
   const { amministrazione, setAmministrazione } = useState(undefined);
   const [verbale, setVerbale] = useState(undefined);
   const [documentiVerbale, setDocumentiVerbale] = useState([]);
-  const [controlloModulo, setControlloModulo] = useState(false);
+  const [controlloModulo, setControlloModulo] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -139,11 +139,11 @@ const Verbale = () => {
       // const violazioni = result.violazioni;
       const controlloPunti = result.violazioni.find((item) => item.punti > 0);
       if (
-        result.data_presentazione_documenti != undefined &&
-        !controlloPunti &&
-        result.eseguito126
+        result.data_presentazione_documenti == undefined &&
+        controlloPunti &&
+        !result.eseguito126 == true
       ) {
-        setControlloModulo(true);
+        setControlloModulo(false);
       }
       console.log(documenti);
       setVerbale(result);
