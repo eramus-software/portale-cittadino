@@ -128,12 +128,23 @@ const Verbale = () => {
   const { amministrazione, setAmministrazione } = useState(undefined);
   const [verbale, setVerbale] = useState(undefined);
   const [documentiVerbale, setDocumentiVerbale] = useState([]);
+  const [controlloModulo, setControlloModulo] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       const result = await getVerbale(codiceVerbale);
       console.log(result);
       const documenti = await getDocumentiVerbale(codiceVerbale);
+      // console.log(result.violazioni, "violazioniiiiii");
+      // const violazioni = result.violazioni;
+      const controlloPunti = result.violazioni.find((item) => item.punti > 0);
+      if (
+        result.data_presentazione_documenti != undefined &&
+        !controlloPunti &&
+        result.eseguito126
+      ) {
+        setControlloModulo(true);
+      }
       console.log(documenti);
       setVerbale(result);
       setDocumentiVerbale(documenti);
@@ -206,7 +217,7 @@ const Verbale = () => {
               type="button"
               color="success"
               title={"Compila Modulo dati conducente"}
-              disabled={false}
+              disabled={controlloModulo}
             ></MyButton>
           </div>
         </div>
