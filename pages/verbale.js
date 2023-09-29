@@ -141,7 +141,7 @@ const Verbale = () => {
       if (
         result.data_presentazione_documenti == undefined &&
         controlloPunti &&
-        !result.eseguito126 == true
+        (result.eseguito126 == false || result.eseguito126 == undefined)
       ) {
         setControlloModulo(false);
       }
