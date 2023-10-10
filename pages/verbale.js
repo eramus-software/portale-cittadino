@@ -207,7 +207,7 @@ const Verbale = () => {
             <MyPopover
               type="button"
               color="secondary"
-              title={"Effettua Ricorso SANA"}
+              title={"Effettua Ricorso Prefettura"}
             ></MyPopover>
           </div>
 
