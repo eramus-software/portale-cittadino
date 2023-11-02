@@ -38,7 +38,7 @@ export default function MyPopover(props){
             </div>
           </PopoverHeader>
           <PopoverBody>
-            <small>Gentile utente, attraverso il tasto di seguito indicato potrà trasmettere alla prefettura il ricorso riferito alla sanzione amministrativa notificata.</small>
+            <small>Gentile utente, attraverso il tasto di seguito indicato potrà visualizzare il ricorso presentato alla Prefettura riferito alla sanzione amministrativa notificata.</small>
             <br/>
             <small>Una volta aperto il portale SANA dovrà cliccare sulla voce “Sistema informativo sanzionatorio amministrativo delle Prefetture” , cliccare poi “SANA – per il cittadino” ed inserire i dati inerenti al ricorso.</small>
             <a onClick={openSana} className='popover-inner-link'>
