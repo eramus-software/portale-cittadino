@@ -88,6 +88,18 @@ const Verbale = () => {
     return response.data;
   };
 
+  const getModuloDatiById = async (id) => {
+    const response = await axios.get(
+      baseUrl() + `/moduli_dati_conducentes/${id}`,
+      {
+        headers: {
+          "X-Api-Key": s, //the token is a variable which holds the token
+        },
+      }
+    );
+    return response.data;
+  };
+
   const getDocumentiVerbale = async (id) => {
     const response = await axios.get(baseUrl() + `/verbali/${id}/documents`, {
       headers: {
@@ -129,10 +141,13 @@ const Verbale = () => {
   const [verbale, setVerbale] = useState(undefined);
   const [documentiVerbale, setDocumentiVerbale] = useState([]);
   const [controlloModulo, setControlloModulo] = useState(true);
+  const [modulo, setModulo] = useState({});
 
   useEffect(() => {
     async function fetchData() {
       const result = await getVerbale(codiceVerbale);
+      const modulo = await getModuloDatiById(result.id);
+      setModulo(modulo);
       console.log(result);
       const documenti = await getDocumentiVerbale(codiceVerbale);
       // console.log(result.violazioni, "violazioniiiiii");
@@ -141,7 +156,9 @@ const Verbale = () => {
       if (
         result.data_presentazione_documenti == undefined &&
         controlloPunti &&
-        (result.eseguito126 == false || result.eseguito126 == undefined)
+        (result.eseguito126 == false || result.eseguito126 == undefined) &&
+        (modulo.length == 0 ||
+          (modulo.length == 1 && modulo[0].tipo_lavorazione == "Rifiutata"))
       ) {
         setControlloModulo(false);
       }
