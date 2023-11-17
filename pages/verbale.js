@@ -92,6 +92,9 @@ const Verbale = () => {
     const response = await axios.get(
       baseUrl() + `/moduli_dati_conducentes/${id}`,
       {
+        body: {
+          filter_verbale_id: id,
+        },
         headers: {
           "X-Api-Key": s, //the token is a variable which holds the token
         },
