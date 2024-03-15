@@ -31,7 +31,7 @@ export default function MyHeader() {
         <HeaderContent>
           <HeaderBrand iconName="it-code-circle">
             <h2>Portale cittadino sanzioni CDS</h2>
-            <h3>Comune di {s}</h3>
+            {/* <h3>Comune di {s}</h3> */}
           </HeaderBrand>
           
         </HeaderContent>
