@@ -11,6 +11,7 @@ import axios from "axios";
 import { baseUrl } from "../utils/config";
 import fileDownload from "js-file-download";
 import Link from "next/link";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 //import {Alert, Button, Col, Input, Row, TextArea} from 'design-react-kit'
 
@@ -181,7 +182,25 @@ const Verbale = () => {
     window.open(
       `http://${localStorage.getItem(
         "subdomain"
-      )}.sportelloente.it/posts/compilazioneistanze?token=${codiceVerbale}`
+      )}.sportelloente.it/posts/compilazioneistanze?tokenMdc=${codiceVerbale}`
+    );
+  }
+
+  function openRichiestaAnnullamento(e) {
+    e.preventDefault();
+    window.open(
+      `http://${localStorage.getItem(
+        "subdomain"
+      )}.sportelloente.it/posts/compilazioneistanze?tokenAnn=${codiceVerbale}`
+    );
+  }
+
+  function openRichiestaRateizzazione(e) {
+    e.preventDefault();
+    window.open(
+      `http://${localStorage.getItem(
+        "subdomain"
+      )}.sportelloente.it/posts/compilazioneistanze?tokenRat=${codiceVerbale}`
     );
   }
 
@@ -218,19 +237,20 @@ const Verbale = () => {
             ></MyButton>
           </div>
           <div>
-            {/* <MyButton
-              //onClick={(e) => openModuloDatiConducente(e)}
-              onClick={() => togglePopover}
-              type="button"
-              color="warning"
-              title={"Effettua Ricorso SANA"}
-            ></MyButton> */}
-
             <MyPopover
               type="button"
               color="secondary"
-              title={"Effettua Ricorso Prefettura"}
+              title={"Visualizza Ricorso Prefettura"}
             ></MyPopover>
+          </div>
+
+          <div>
+            <MyButton
+              onClick={(e) => openRichiestaRateizzazione(e)}
+              type="button"
+              color="success"
+              title={"Richiedi rateizzazione"}
+            ></MyButton>
           </div>
 
           <div>
@@ -238,8 +258,17 @@ const Verbale = () => {
               onClick={(e) => openModuloDatiConducente(e)}
               type="button"
               color="success"
-              title={"Compila Modulo dati conducente"}
+              title={"Inserisci dati conducente"}
               disabled={controlloModulo}
+            ></MyButton>
+          </div>
+
+          <div>
+            <MyButton
+              onClick={(e) => openRichiestaAnnullamento(e)}
+              type="button"
+              color="danger"
+              title={"Segnala anomalia"}
             ></MyButton>
           </div>
         </div>
