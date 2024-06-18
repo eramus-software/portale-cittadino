@@ -12,10 +12,13 @@ import { baseUrl } from "../utils/config";
 import fileDownload from "js-file-download";
 import Link from "next/link";
 import { Dropdown, DropdownButton } from "react-bootstrap";
+import { useRouter } from "next/router";
 
 //import {Alert, Button, Col, Input, Row, TextArea} from 'design-react-kit'
 
 const Verbale = () => {
+  const router = useRouter();
+
   const MyAlert = dynamic(() => import("../components/MyAlert"), {
     ssr: false,
   });
@@ -150,27 +153,31 @@ const Verbale = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getVerbale(codiceVerbale);
-      const modulo1 = await getModuloDatiById(result.id);
-      setModulo(modulo1);
-      console.log(result);
-      const documenti = await getDocumentiVerbale(codiceVerbale);
-      // console.log(result.violazioni, "violazioniiiiii");
-      // const violazioni = result.violazioni;
-      const controlloPunti = result.violazioni.find((item) => item.punti > 0);
-      if (
-        result.data_presentazione_documenti == undefined &&
-        controlloPunti &&
-        (result.eseguito126 == false || result.eseguito126 == undefined) &&
-        (modulo1.moduli.length == 0 ||
-          (modulo1.moduli.length == 1 &&
-            modulo1[0].moduli.tipo_lavorazione == "Rifiutata"))
-      ) {
-        setControlloModulo(false);
+      if (codiceVerbale != null && codiceVerbale != "") {
+        const result = await getVerbale(codiceVerbale);
+        const modulo1 = await getModuloDatiById(result.id);
+        setModulo(modulo1);
+        console.log(result);
+        const documenti = await getDocumentiVerbale(codiceVerbale);
+        // console.log(result.violazioni, "violazioniiiiii");
+        // const violazioni = result.violazioni;
+        const controlloPunti = result.violazioni.find((item) => item.punti > 0);
+        if (
+          result.data_presentazione_documenti == undefined &&
+          controlloPunti &&
+          (result.eseguito126 == false || result.eseguito126 == undefined) &&
+          (modulo1.moduli.length == 0 ||
+            (modulo1.moduli.length == 1 &&
+              modulo1[0].moduli.tipo_lavorazione == "Rifiutata"))
+        ) {
+          setControlloModulo(false);
+        }
+        console.log(documenti);
+        setVerbale(result);
+        setDocumentiVerbale(documenti);
+      } else {
+        router.push("/login");
       }
-      console.log(documenti);
-      setVerbale(result);
-      setDocumentiVerbale(documenti);
     }
     fetchData();
   }, []);
