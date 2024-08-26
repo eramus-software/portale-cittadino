@@ -250,7 +250,7 @@ const Verbale = () => {
               title={"Visualizza Ricorso Prefettura"}
             ></MyPopover>
           </div>
-          {/* 
+
           <div>
             <MyButton
               onClick={(e) => openRichiestaRateizzazione(e)}
@@ -258,7 +258,7 @@ const Verbale = () => {
               color="success"
               title={"Richiedi rateizzazione"}
             ></MyButton>
-          </div> */}
+          </div>
 
           <div>
             <MyButton
@@ -269,7 +269,7 @@ const Verbale = () => {
               disabled={controlloModulo}
             ></MyButton>
           </div>
-          {/* 
+
           <div>
             <MyButton
               onClick={(e) => openRichiestaAnnullamento(e)}
@@ -277,7 +277,7 @@ const Verbale = () => {
               color="danger"
               title={"Segnala anomalia"}
             ></MyButton>
-          </div> */}
+          </div>
         </div>
 
         <div className="form-row" style={{ height: "100px" }}>
