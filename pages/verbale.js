@@ -183,13 +183,15 @@ const Verbale = () => {
   }, []);
 
   console.log(codiceVerbale);
-
   function openModuloDatiConducente(e) {
     e.preventDefault();
+    const subdomain =
+      localStorage.getItem("subdomain") === "castel-volturno"
+        ? "castelvolturno"
+        : localStorage.getItem("subdomain");
+
     window.open(
-      `http://${localStorage.getItem(
-        "subdomain"
-      )}.sportelloente.it/posts/compilazioneistanze?tokenMdc=${codiceVerbale}`
+      `http://${subdomain}.sportelloente.it/posts/compilazioneistanze?tokenMdc=${codiceVerbale}`
     );
   }
 
