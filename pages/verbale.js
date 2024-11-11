@@ -197,19 +197,23 @@ const Verbale = () => {
 
   function openRichiestaAnnullamento(e) {
     e.preventDefault();
+    const subdomain =
+      localStorage.getItem("subdomain") === "castel-volturno"
+        ? "castelvolturno"
+        : localStorage.getItem("subdomain");
     window.open(
-      `http://${localStorage.getItem(
-        "subdomain"
-      )}.sportelloente.it/posts/compilazioneistanze?tokenAnn=${codiceVerbale}`
+      `http://${subdomain}.sportelloente.it/posts/compilazioneistanze?tokenAnn=${codiceVerbale}`
     );
   }
 
   function openRichiestaRateizzazione(e) {
     e.preventDefault();
+    const subdomain =
+      localStorage.getItem("subdomain") === "castel-volturno"
+        ? "castelvolturno"
+        : localStorage.getItem("subdomain");
     window.open(
-      `http://${localStorage.getItem(
-        "subdomain"
-      )}.sportelloente.it/posts/compilazioneistanze?tokenRat=${codiceVerbale}`
+      `http://${subdomain}.sportelloente.it/posts/compilazioneistanze?tokenRat=${codiceVerbale}`
     );
   }
 
