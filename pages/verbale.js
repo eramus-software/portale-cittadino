@@ -149,6 +149,7 @@ const Verbale = () => {
   const [verbale, setVerbale] = useState(undefined);
   const [documentiVerbale, setDocumentiVerbale] = useState([]);
   const [controlloModulo, setControlloModulo] = useState(true);
+
   const [modulo, setModulo] = useState({});
 
   useEffect(() => {
@@ -263,6 +264,9 @@ const Verbale = () => {
               type="button"
               color="success"
               title={"Richiedi rateizzazione"}
+              disabled={
+                verbale && [5, 10, 12, 15, 16].includes(verbale.status_verbale)
+              }
             ></MyButton>
           </div>
 
@@ -282,6 +286,9 @@ const Verbale = () => {
               type="button"
               color="danger"
               title={"Segnala anomalia"}
+              disabled={
+                verbale && [5, 10, 12, 15, 16].includes(verbale.status_verbale)
+              }
             ></MyButton>
           </div>
         </div>
