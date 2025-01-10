@@ -262,6 +262,7 @@ const Verbale = () => {
               onClick={(e) => openRichiestaRateizzazione(e)}
               type="button"
               color="success"
+              disabled={verbale && verbale.status_verbale == 5}
               title={"Richiedi rateizzazione"}
             ></MyButton>
           </div>
@@ -281,6 +282,7 @@ const Verbale = () => {
               onClick={(e) => openRichiestaAnnullamento(e)}
               type="button"
               color="danger"
+              disabled={verbale && verbale.status_verbale == 5}
               title={"Segnala anomalia"}
             ></MyButton>
           </div>
