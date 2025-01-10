@@ -263,7 +263,7 @@ const Verbale = () => {
               onClick={(e) => openRichiestaRateizzazione(e)}
               type="button"
               color="success"
-              disabled={verbale && verbale.status_verbale == 5}
+              // disabled={verbale && verbale.status_verbale == 5}
               title={"Richiedi rateizzazione"}
               disabled={
                 verbale && [5, 10, 12, 15, 16].includes(verbale.status_verbale)
@@ -286,7 +286,7 @@ const Verbale = () => {
               onClick={(e) => openRichiestaAnnullamento(e)}
               type="button"
               color="danger"
-              disabled={verbale && verbale.status_verbale == 5}
+              // disabled={verbale && verbale.status_verbale == 5}
               title={"Segnala anomalia"}
               disabled={
                 verbale && [5, 10, 12, 15, 16].includes(verbale.status_verbale)
