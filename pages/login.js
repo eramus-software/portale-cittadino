@@ -9,11 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { baseUrl } from "../utils/config";
-
 import dynamic from "next/dynamic";
-//import {Button } from 'design-react-kit'
-//import {MyHeader} from '../components/MyHeader'
-//import {Footer} from '../components/Footer'
 
 const MyHeader = dynamic(() => import("../components/MyHeader"), {
   ssr: false,
@@ -21,43 +17,18 @@ const MyHeader = dynamic(() => import("../components/MyHeader"), {
 const Footer = dynamic(() => import("../components/Footer"), {
   ssr: false,
 });
-
 const MyButton = dynamic(() => import("../components/MyButton"), {
   ssr: false,
 });
 const MyAlert = dynamic(() => import("../components/MyAlert"), {
   ssr: false,
 });
+
 const Login = () => {
   const router = useRouter();
 
-  const MyAlert = dynamic(() => import("../components/MyAlert"), {
-    ssr: false,
-  });
-  //let navigate = useNavigate();
-  async function goToVerbale() {
-    try {
-      const response = await getVerbale();
-      console.log(response, "ciao bello");
-      router.push("/verbale");
-    } catch (e) {
-      //alert("No verbale");
-      handleShow();
-    }
-  }
-
-  const getVerbale = async () => {
-    const response = await axios.get(baseUrl() + `/verbali/${codiceVerbale}`, {
-      headers: {
-        "X-Api-Key": s, //the token is a variable which holds the token
-      },
-    });
-    return response;
-  };
-
   const { codiceVerbale, setCodiceVerbale, s } = useAppContext();
 
-  //POPUP
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -65,8 +36,26 @@ const Login = () => {
 
   const handleChange = (e) => {
     const value = e.currentTarget.value;
-
     setCodiceVerbale(value);
+  };
+
+  async function goToVerbale() {
+    try {
+      const response = await getVerbale();
+      console.log(response, "ciao bello");
+      router.push("/verbale");
+    } catch (e) {
+      handleShow();
+    }
+  }
+
+  const getVerbale = async () => {
+    const response = await axios.get(baseUrl() + `/verbali/${codiceVerbale}`, {
+      headers: {
+        "X-Api-Key": s,
+      },
+    });
+    return response;
   };
 
   return (
@@ -112,7 +101,7 @@ const Login = () => {
                 width="16"
                 height="16"
                 fill="currentColor"
-                class="bi bi-exclamation-octagon icon icon-danger"
+                className="bi bi-exclamation-octagon icon icon-danger"
                 viewBox="0 0 16 16"
               >
                 <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z" />
@@ -132,6 +121,24 @@ const Login = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <a
+        href="/Openpol Manuale d’Uso Atti Online.pdf"
+        download
+        className="btn btn-primary"
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          zIndex: 1000,
+          borderRadius: "30px",
+          padding: "12px 20px",
+          fontSize: "16px",
+        }}
+        title="Scarica il manuale"
+      >
+        Scarica Manuale
+      </a>
     </div>
   );
 };
