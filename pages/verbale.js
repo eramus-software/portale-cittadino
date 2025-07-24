@@ -162,17 +162,33 @@ const Verbale = () => {
         const documenti = await getDocumentiVerbale(codiceVerbale);
         // console.log(result.violazioni, "violazioniiiiii");
         // const violazioni = result.violazioni;
+        console.log(modulo1.moduli[0].tipo_lavorazione, "tipo lavorazione");
+
         const controlloPunti = result.violazioni.find((item) => item.punti > 0);
+        console.log(
+          "data_presentazione_documenti:",
+          result.data_presentazione_documenti
+        );
+        console.log("controlloPunti:", controlloPunti);
+        console.log("eseguito126:", result.eseguito126);
+        console.log("moduli.length:", modulo1.moduli.length);
+        console.log("tipo_lavorazione:", modulo1.moduli[0]?.tipo_lavorazione);
+        const esisteAccettata = modulo1.moduli.some(
+          (m) => m?.tipo_lavorazione === "Accettata"
+        );
+
         if (
-          result.data_presentazione_documenti == undefined &&
+          (result.data_presentazione_documenti == undefined ||
+            (modulo1.moduli.length > 0 &&
+              modulo1.moduli[0]?.tipo_lavorazione === "Rifiutata")) &&
           controlloPunti &&
-          (result.eseguito126 == false || result.eseguito126 == undefined) &&
-          (modulo1.moduli.length == 0 ||
-            (modulo1.moduli.length == 1 &&
-              modulo1[0].moduli.tipo_lavorazione == "Rifiutata"))
+          (result.eseguito126 === false || result.eseguito126 == undefined) &&
+          !esisteAccettata // ❗️ Nessun modulo accettato
         ) {
+          console.log("✅ sono entrato qui");
           setControlloModulo(false);
         }
+
         console.log(documenti);
         setVerbale(result);
         setDocumentiVerbale(documenti);
