@@ -162,7 +162,6 @@ const Verbale = () => {
         const documenti = await getDocumentiVerbale(codiceVerbale);
         // console.log(result.violazioni, "violazioniiiiii");
         // const violazioni = result.violazioni;
-        console.log(modulo1.moduli[0].tipo_lavorazione, "tipo lavorazione");
 
         const controlloPunti = result.violazioni.find((item) => item.punti > 0);
         console.log(
