@@ -179,6 +179,7 @@ const Verbale = () => {
 
         if (
           (result.data_presentazione_documenti == undefined ||
+            modulo1.moduli.length === 0 || // ✅ Caso aggiunto: nessun modulo
             (modulo1.moduli.length > 0 &&
               modulo1.moduli[0]?.tipo_lavorazione === "Rifiutata")) &&
           controlloPunti &&
