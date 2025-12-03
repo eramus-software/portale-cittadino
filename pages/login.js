@@ -61,8 +61,15 @@ const Login = () => {
   return (
     <div>
       <MyHeader />
-      <section style={{ marginTop: "20%", marginBottom: "23%" }}>
+      <section style={{ marginTop: "10%", marginBottom: "23%" }}>
         <div className="container mx-auto">
+          <h1 className="text-center mb-2">
+            Accesso Verbale Codice della Strada
+          </h1>
+          <p className="text-center mb-8">
+            Inserisci il codice indicato sul verbale ricevuto ricevuto per poter
+            accedere a tutte le info del verbale
+          </p>
           <div className="d-flex flex-column flex-md-row justify-content-between col-12">
             <input
               type="text"
@@ -84,7 +91,7 @@ const Login = () => {
         </div>
       </section>
 
-      <Footer />
+      {/* <Footer /> */}
 
       <Modal show={show} onHide={handleClose} backdrop="static">
         <Modal.Header
@@ -123,7 +130,7 @@ const Login = () => {
       </Modal>
 
       <a
-        href="/Openpol Manuale d’Uso Atti Online.pdf"
+        href="/Openpol Manuale d'Uso Atti Online.pdf"
         download
         className="btn btn-primary"
         style={{

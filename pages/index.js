@@ -1,27 +1,22 @@
-import Head from 'next/head'
+// index.js
+
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import packageJson from "../package.json";
 import { useAppContext } from "../context/appContext";
 import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
-import "typeface-titillium-web";
-import "typeface-roboto-mono";
-import "typeface-lora";
-import Login from './login';
+// ... (altri import CSS)
 
+import dynamic from "next/dynamic";
+
+// Carica l'intera pagina di selezione dinamicamente con ssr: false
+const DynamicSelectionPage = dynamic(() => import("./scelta_app"), {
+  ssr: false,
+});
 
 export default function Home() {
+  // ... (Logica useEffect e Context)
 
-  const [subdomain, setSubdomain] = useState('')
-
-  useEffect(() => {
-    const s = localStorage.getItem('subdomain');
-    setSubdomain(s)
-  }, [subdomain])
-  
-  const { currentUser } = useAppContext();
-  console.log(currentUser)
-
-  return (
-    <Login/>
-  )
+  // Sostituisci <SelectionPage /> con <DynamicSelectionPage />
+  return <DynamicSelectionPage />;
 }
