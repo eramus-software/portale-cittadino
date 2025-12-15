@@ -5,6 +5,7 @@ import "typeface-roboto-mono";
 import "typeface-lora";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 import { Button, Row, Col, Container, Icon } from "design-react-kit"; // Importazione dei componenti DRK
 
 const MyHeader = dynamic(() => import("../components/MyHeader"), {
@@ -19,18 +20,34 @@ const Footer = dynamic(() => import("../components/Footer"), {
 const SelectionPage = () => {
   const router = useRouter();
 
+  const [tipo, setTipo] = useState(null);
+
   const handleCodiceStrada = () => {
+    setTipo("cds");
+    if (typeof window !== "undefined")
+      localStorage.setItem("tipoRicerca", "cds");
     router.push("/login");
   };
 
   const handleSanzioniAmministrative = () => {
+    setTipo("sanzioni");
+    if (typeof window !== "undefined")
+      localStorage.setItem("tipoRicerca", "sanzioni");
     router.push("/login_am");
   };
 
   return (
     // Contenitore principale: d-flex flex-column min-vh-100 per lo Sticky Footer
     <div className="d-flex flex-column min-vh-100">
-      <MyHeader />
+      <MyHeader
+        title={
+          tipo === "cds"
+            ? "Portale cittadino CDS"
+            : tipo === "sanzioni"
+            ? "Portale cittadino sanzioni amministrative"
+            : "Portale cittadino"
+        }
+      />
 
       {/* Contenitore centrale: flex-grow-1 per occupare lo spazio rimanente */}
       <Container className="d-flex flex-column align-items-center justify-content-center flex-grow-1 py-5">

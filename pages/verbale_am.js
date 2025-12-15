@@ -155,14 +155,7 @@ const VerbaleAM = () => {
               disabled={false}
             ></MyButton>
           </div>
-          <div>
-            <MyPopover
-              type="button"
-              color="secondary"
-              title={"Visualizza Ricorso Prefettura"}
-            ></MyPopover>
-          </div>
-
+            
           <div>
             <MyButton
               onClick={(e) => openRichiestaRateizzazione(e)}
