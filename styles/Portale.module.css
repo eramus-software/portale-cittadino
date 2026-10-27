@@ -1,0 +1,474 @@
+/* Pagina di scelta del tipo di verbale e pagine di accesso con codice.
+   Stessa palette di Verbali.module.css. */
+
+.page {
+  --vb-accent: var(--app-theme-color, #0066cc);
+  --vb-accent-rgb: var(--bs-primary-rgb, 0, 102, 204);
+  --vb-border: #e6e9ef;
+  --vb-muted: #6b7280;
+  --vb-text: #1f2937;
+  --vb-soft: #f7f8fb;
+  --vb-radius: 12px;
+  flex-grow: 1;
+  color: var(--vb-text);
+  background:
+    radial-gradient(
+      1200px 380px at 50% -120px,
+      rgba(var(--vb-accent-rgb), 0.09),
+      transparent 70%
+    ),
+    var(--vb-soft);
+  padding: 3rem 0 4rem;
+}
+
+.inner {
+  max-width: 880px;
+}
+
+.narrow {
+  max-width: 560px;
+}
+
+/* ---------- Intestazione ---------- */
+
+.intro {
+  text-align: center;
+  margin-bottom: 2.25rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(var(--vb-accent-rgb), 0.08);
+  color: var(--vb-accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.6rem;
+  color: var(--vb-text);
+}
+
+.subtitle {
+  max-width: 34rem;
+  margin: 0 auto;
+  color: var(--vb-muted);
+  font-size: 1rem;
+}
+
+/* ---------- Card di scelta ---------- */
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.choice {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 1.6rem 1.5rem 1.4rem;
+  border: 1px solid var(--vb-border);
+  border-radius: var(--vb-radius);
+  background: #fff;
+  color: var(--vb-text);
+  text-align: left;
+  font-family: inherit;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.choice:hover {
+  border-color: rgba(var(--vb-accent-rgb), 0.45);
+  box-shadow: 0 10px 28px rgba(16, 24, 40, 0.08);
+  transform: translateY(-2px);
+}
+
+.choice:focus {
+  outline: none;
+}
+
+.choice:focus-visible {
+  outline: 3px solid rgba(var(--vb-accent-rgb), 0.4);
+  outline-offset: 2px;
+}
+
+.choiceIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 10px;
+  background: rgba(var(--vb-accent-rgb), 0.1);
+  color: var(--vb-accent);
+  margin-bottom: 0.4rem;
+}
+
+.choiceTitle {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.choiceText {
+  display: block;
+  margin: 0;
+  color: var(--vb-muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.choiceCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+  color: var(--vb-accent);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.choiceCta svg {
+  transition: transform 0.2s ease;
+}
+
+.choice:hover .choiceCta svg {
+  transform: translateX(3px);
+}
+
+/* ---------- Nota informativa ---------- */
+
+.help {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.75rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--vb-border);
+  border-radius: var(--vb-radius);
+  background: #fff;
+}
+
+.helpIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  background: rgba(var(--vb-accent-rgb), 0.08);
+  color: var(--vb-accent);
+}
+
+.helpText {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--vb-muted);
+  line-height: 1.45;
+}
+
+.helpText strong {
+  display: block;
+  color: var(--vb-text);
+  font-weight: 600;
+}
+
+.helpBtn,
+.helpBtn:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 0.45rem;
+  height: 36px;
+  padding: 0 0.95rem;
+  border: 1px solid rgba(var(--vb-accent-rgb), 0.35);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--vb-accent);
+  font-size: 0.825rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.helpBtn:hover {
+  background: var(--vb-accent);
+  border-color: var(--vb-accent);
+  color: #fff;
+  text-decoration: none;
+}
+
+.helpBtn:focus-visible {
+  outline: 2px solid rgba(var(--vb-accent-rgb), 0.45);
+  outline-offset: 1px;
+}
+
+/* ---------- Accesso con codice ---------- */
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--vb-muted);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.backLink:hover {
+  color: var(--vb-accent);
+}
+
+.card {
+  padding: 1.75rem;
+  border: 1px solid var(--vb-border);
+  border-radius: var(--vb-radius);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04),
+    0 12px 32px rgba(16, 24, 40, 0.05);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--vb-border);
+}
+
+.cardIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--vb-accent-rgb), 0.16),
+    rgba(var(--vb-accent-rgb), 0.06)
+  );
+  color: var(--vb-accent);
+}
+
+.cardKicker {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--vb-accent);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardTitle {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.cardText {
+  margin: 0 0 1.25rem;
+  color: var(--vb-muted);
+  font-size: 0.9rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--vb-text);
+}
+
+/* Sovrascrive lo stile "a riga" degli input di Bootstrap Italia */
+.input {
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding: 0 0.85rem;
+  border: 1px solid #d5dae2 !important;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--vb-text);
+  font-family: "Roboto Mono", monospace;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--vb-accent) !important;
+  box-shadow: 0 0 0 3px rgba(var(--vb-accent-rgb), 0.18) !important;
+}
+
+.input:disabled {
+  background: var(--vb-soft);
+}
+
+.hint {
+  margin: 0.4rem 0 0;
+  color: var(--vb-muted);
+  font-size: 0.75rem;
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #f4c7c3;
+  border-radius: 8px;
+  background: #fef3f2;
+  color: #b42318;
+  font-size: 0.85rem;
+}
+
+.error svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.error strong {
+  display: block;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  height: 40px;
+  padding: 0 1.1rem;
+  border: 1px solid #d5dae2;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--vb-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    filter 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--vb-soft);
+  border-color: #c3cad5;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid rgba(var(--vb-accent-rgb), 0.45);
+  outline-offset: 1px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnPrimary,
+.btnPrimary:hover:not(:disabled) {
+  background: var(--vb-accent);
+  border-color: var(--vb-accent);
+  color: #fff;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  filter: brightness(0.93);
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding: 2rem 0 3rem;
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+
+  .help {
+    flex-wrap: wrap;
+  }
+
+  .helpText {
+    flex-basis: calc(100% - 3.25rem);
+  }
+
+  .helpBtn {
+    width: 100%;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .choice,
+  .choiceCta svg {
+    transition: none;
+  }
+
+  .choice:hover {
+    transform: none;
+  }
+}

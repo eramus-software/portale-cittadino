@@ -1,0 +1,90 @@
+/* Bottone pagoPA, replicato da Sportello del Contribuente (.sdc-pagopa-btn) */
+
+.btn {
+  --pagopa: #0066cc;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 7.5rem;
+  min-height: 2.875rem;
+  padding: 0.55rem 1.75rem;
+  border: 0 !important;
+  border-radius: 12px;
+  background: var(--pagopa);
+  box-shadow:
+    0 1px 2px rgba(0, 102, 204, 0.3),
+    0 6px 18px rgba(0, 102, 204, 0.28);
+  cursor: pointer;
+  transition:
+    background-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+
+/* Logo monocromatico reso bianco sul fondo blu */
+.btn img {
+  display: block;
+  filter: brightness(0) invert(1);
+}
+
+.btn:hover:not(:disabled) {
+  background: #0052a3;
+  transform: translateY(-1px);
+  box-shadow:
+    0 2px 4px rgba(0, 102, 204, 0.3),
+    0 10px 24px rgba(0, 102, 204, 0.35);
+}
+
+.btn:active:not(:disabled) {
+  transform: none;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(0, 102, 204, 0.45) !important;
+  outline-offset: 3px;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn :global(.spinner-border) {
+  color: #fff;
+}
+
+/* Compatto: stessa forma dei bottoni dei verbali (32px, raggio 6px) */
+.small {
+  min-width: 4.5rem;
+  min-height: 0;
+  height: 32px;
+  padding: 0 1rem;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.small:hover:not(:disabled) {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+}
+
+.small:focus-visible {
+  outline-width: 2px !important;
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: none;
+  }
+}

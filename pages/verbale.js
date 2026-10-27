@@ -1,87 +1,68 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/appContext";
-/*import {
-  getVerbale,
-  getDocumentiVerbale,
-  getFileVerbale,
-} from "../services/verbali";*/
-import moment from "moment";
 import dynamic from "next/dynamic";
 import axios from "axios";
 import { baseUrl } from "../utils/config";
 import fileDownload from "js-file-download";
-import Link from "next/link";
-import { Dropdown, DropdownButton } from "react-bootstrap";
 import { useRouter } from "next/router";
+import {
+  ArrowRight,
+  Bell,
+  CalendarEvent,
+  CarFront,
+  CashCoin,
+  Download,
+  ExclamationTriangle,
+  FileEarmarkText,
+  Flag,
+  HouseDoor,
+  InfoCircle,
+  Journal,
+  Megaphone,
+  People,
+  PersonBadge,
+} from "react-bootstrap-icons";
+import PagoPaButton from "../components/PagoPaButton";
+import { apriCarrelloPagoPA, avvisoPagabile } from "../utils/pagopa";
+import {
+  ActionBar,
+  BackLink,
+  btnCls,
+  DetailHero,
+  DocumentList,
+  EmailPrompt,
+  EmptyNote,
+  FooterActions,
+  InfoGrid,
+  MiniTable,
+  PageShell,
+  Plate,
+  Section,
+  SectionGrid,
+  SubBlock,
+  Totals,
+  Violation,
+  formatDate,
+  formatEuro,
+} from "../components/verbali/VerbaliUI";
 
-//import {Alert, Button, Col, Input, Row, TextArea} from 'design-react-kit'
+const MyHeader = dynamic(() => import("../components/MyHeader"), {
+  ssr: false,
+});
+
+const Footer = dynamic(() => import("../components/Footer"), { ssr: false });
+
+const soggettoItems = (s) => [
+  {
+    label: "Nome e cognome",
+    value: s.nome && s.cognome ? `${s.nome} ${s.cognome}` : s.ragione_sociale,
+  },
+  { label: "Codice fiscale", value: s.codfiscale, mono: true },
+  { label: "Data di nascita", value: formatDate(s.data_nascita) },
+];
 
 const Verbale = () => {
   const router = useRouter();
-
-  const MyAlert = dynamic(() => import("../components/MyAlert"), {
-    ssr: false,
-  });
-
-  const MyHeader = dynamic(() => import("../components/MyHeader"), {
-    ssr: false,
-  });
-
-  const Footer = dynamic(() => import("../components/Footer"), { ssr: false });
-
-  const MyButton = dynamic(() => import("../components/MyButton"), {
-    ssr: false,
-  });
-
-  const MyCol = dynamic(() => import("../components/MyCol"), { ssr: false });
-
-  const MyInput = dynamic(() => import("../components/MyInput"), {
-    ssr: false,
-  });
-
-  const MyRow = dynamic(() => import("../components/MyRow"), { ssr: false });
-
-  const MyTextArea = dynamic(() => import("../components/MyTextArea"), {
-    ssr: false,
-  });
-
-  const MyPopover = dynamic(() => import("../components/MyPopover"), {
-    ssr: false,
-  });
-
-  /*const Alert = dynamic(() => import('design-react-kit').then((module) => module.Alert), {
-    ssr: false,
-  });
-  const Button = dynamic(
-    () => import("design-react-kit").then((module) => module.Button),
-    {
-      ssr: false,
-    }
-  );
-  const Col = dynamic(
-    () => import("design-react-kit").then((module) => module.Col),
-    {
-      ssr: false,
-    }
-  );
-  const Input = dynamic(
-    () => import("design-react-kit").then((module) => module.Input),
-    {
-      ssr: false,
-    }
-  );
-  const Row = dynamic(
-    () => import("design-react-kit").then((module) => module.Row),
-    {
-      ssr: false,
-    }
-  );
-  const TextArea = dynamic(
-    () => import("design-react-kit").then((module) => module.TextArea),
-    {
-      ssr: false,
-    }
-  );*/
 
   const getVerbale = async (id) => {
     const response = await axios.get(baseUrl() + `/verbali/${id}`, {
@@ -118,7 +99,6 @@ const Verbale = () => {
   };
 
   const getFileVerbale = async (id, name, codice) => {
-    // const writer = createWriteStream("download");
     const response = await axios.get(
       baseUrl() + `/documents/${id}?codiceunivoco=${codice}&file=${true}`,
       {
@@ -129,49 +109,30 @@ const Verbale = () => {
       }
     );
     fileDownload(response.data, name);
-
-    // return response.data.pipe(writer);
   };
 
   async function scaricaFile(e, documento) {
     e.preventDefault();
-    const file = await getFileVerbale(
-      documento.id,
-      documento.title,
-      codiceVerbale
-    );
-    console.log(file);
+    await getFileVerbale(documento.id, documento.title, codiceVerbale);
   }
 
   const { codiceVerbale, s } = useAppContext();
 
-  const { amministrazione, setAmministrazione } = useState(undefined);
   const [verbale, setVerbale] = useState(undefined);
   const [documentiVerbale, setDocumentiVerbale] = useState([]);
   const [controlloModulo, setControlloModulo] = useState(true);
-
-  const [modulo, setModulo] = useState({});
+  const [showInfoSana, setShowInfoSana] = useState(false);
+  const [pagamentoInCorso, setPagamentoInCorso] = useState(false);
+  const [errorePagamento, setErrorePagamento] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       if (codiceVerbale != null && codiceVerbale != "") {
         const result = await getVerbale(codiceVerbale);
         const modulo1 = await getModuloDatiById(result.id);
-        setModulo(modulo1);
-        console.log(result);
         const documenti = await getDocumentiVerbale(codiceVerbale);
-        // console.log(result.violazioni, "violazioniiiiii");
-        // const violazioni = result.violazioni;
 
         const controlloPunti = result.violazioni.find((item) => item.punti > 0);
-        console.log(
-          "data_presentazione_documenti:",
-          result.data_presentazione_documenti
-        );
-        console.log("controlloPunti:", controlloPunti);
-        console.log("eseguito126:", result.eseguito126);
-        console.log("moduli.length:", modulo1.moduli.length);
-        console.log("tipo_lavorazione:", modulo1.moduli[0]?.tipo_lavorazione);
         const esisteAccettata = modulo1.moduli.some(
           (m) => m?.tipo_lavorazione === "Accettata"
         );
@@ -185,21 +146,21 @@ const Verbale = () => {
           (result.eseguito126 === false || result.eseguito126 == undefined) &&
           !esisteAccettata // ❗️ Nessun modulo accettato
         ) {
-          console.log("✅ sono entrato qui");
           setControlloModulo(false);
         }
 
-        console.log(documenti);
         setVerbale(result);
         setDocumentiVerbale(documenti);
       } else {
         router.push("/login");
       }
     }
-    fetchData();
+    fetchData().catch((error) => {
+      console.error("Errore nel caricamento del verbale:", error);
+      router.push("/login");
+    });
   }, []);
 
-  console.log(codiceVerbale);
   function openModuloDatiConducente(e) {
     e.preventDefault();
     const subdomain =
@@ -234,605 +195,440 @@ const Verbale = () => {
     );
   }
 
-  function openPagopaPagamenti(e) {
+  async function openPagopaPagamenti(e) {
     e.preventDefault();
-    window.open(`https://checkout.pagopa.it/`);
+    setErrorePagamento("");
+    setPagamentoInCorso(true);
+    const subdomain = localStorage.getItem("subdomain") || "";
+    try {
+      await apriCarrelloPagoPA(avvisoPagabile(verbale), {
+        companyName: `Comune di ${subdomain
+          .split("-")
+          .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+          .join(" ")}`,
+        description: `Verbale ${verbale.protocollo || verbale.numeroserie || ""}`.trim(),
+      });
+    } catch (error) {
+      console.error("Errore apertura carrello pagoPA:", error);
+      setErrorePagamento(
+        "Non è stato possibile avviare il pagamento. Riprova più tardi."
+      );
+    } finally {
+      setPagamentoInCorso(false);
+    }
   }
 
-  const [popoverOpen, setPopoverOpen] = useState(false);
-  const togglePopover = () => {
-    setPopoverOpen(!popoverOpen);
-  };
+  function openSana(e) {
+    e.preventDefault();
+    window.open(`https://sana.interno.it/index.php`);
+  }
 
-  const targetRef = useRef(null);
+  function goHome() {
+    router.push("/");
+  }
+
+  function nuovaRicerca() {
+    router.push("/login");
+  }
+
+  const violazioniVerbale = Array.isArray(verbale?.violazioni)
+    ? verbale.violazioni
+    : [];
+  const sommaViolazioni = (campo) =>
+    violazioniVerbale.reduce((sum, v) => sum + (Number(v?.[campo]) || 0), 0);
+  const totaleRidotto = sommaViolazioni("importoridotto");
+  const totaleRuolo = sommaViolazioni("importoruolo");
+  const totalePunti = sommaViolazioni("punti");
+
+  const azioniBloccate =
+    verbale && [5, 10, 12, 15, 16].includes(verbale.status_verbale);
 
   return (
     <div>
       <MyHeader />
-      <div className="container">
-        <div className="d-flex my-4 justify-content-between">
-          <div>
-            <h3 className="">Visualizzazione Verbale</h3>
+      {!verbale ? (
+        <PageShell>
+          <div
+            className="d-flex flex-column align-items-center py-5"
+            role="status"
+            aria-live="polite"
+          >
+            <div className="spinner-border text-primary mb-3" />
+            <span>Caricamento del verbale in corso...</span>
           </div>
-        </div>
+        </PageShell>
+      ) : (
+        <PageShell>
+          <BackLink onClick={nuovaRicerca}>Nuova ricerca</BackLink>
 
-        <div className="d-flex my-4 justify-content-between">
-          <div>
-            <MyButton
-              onClick={(e) => openPagopaPagamenti(e)}
-              type="button"
-              color="primary"
-              title={"Paga con PagoPA"}
-              disabled={false}
-            ></MyButton>
-          </div>
-          <div>
-            <MyPopover
-              type="button"
-              color="secondary"
-              title={"Visualizza Ricorso Prefettura"}
-            ></MyPopover>
-          </div>
+          <DetailHero
+            eyebrow="Verbale Codice della Strada"
+            title={
+              verbale.protocollo
+                ? `Protocollo ${verbale.protocollo}`
+                : "Dettaglio verbale"
+            }
+            subtitle={
+              verbale.numeroserie
+                ? `N. ${verbale.numeroserie}${
+                    verbale.blocchettario?.serie
+                      ? ` · Serie ${verbale.blocchettario.serie}`
+                      : ""
+                  }`
+                : ""
+            }
+            status={verbale.status?.name}
+            stats={[
+              { label: "Data verbale", value: formatDate(verbale.dataverbale) },
+              { label: "Targa", value: verbale.targaveicolo },
+              { label: "Totale ridotto", value: formatEuro(totaleRidotto) },
+              { label: "Punti decurtati", value: totalePunti || "" },
+            ]}
+          />
 
-          <div>
-            <MyButton
-              onClick={(e) => openRichiestaRateizzazione(e)}
-              type="button"
-              color="success"
-              // disabled={verbale && verbale.status_verbale == 5}
-              title={"Richiedi rateizzazione"}
-              disabled={
-                verbale && [5, 10, 12, 15, 16].includes(verbale.status_verbale)
-              }
-            ></MyButton>
-          </div>
-
-          <div>
-            <MyButton
-              onClick={(e) => openModuloDatiConducente(e)}
-              type="button"
-              color="success"
-              title={"Inserisci dati conducente"}
-              disabled={controlloModulo}
-            ></MyButton>
-          </div>
-
-          <div>
-            <MyButton
-              onClick={(e) => openRichiestaAnnullamento(e)}
-              type="button"
-              color="danger"
-              // disabled={verbale && verbale.status_verbale == 5}
-              title={"Segnala anomalia"}
-              disabled={
-                verbale && [5, 10, 12, 15, 16].includes(verbale.status_verbale)
-              }
-            ></MyButton>
-          </div>
-        </div>
-
-        <div className="form-row" style={{ height: "100px" }}>
-          <div className="col col-md-6">
-            <h6 style={{ marginBottom: 15 }}>Protocollo</h6>
-            <MyInput
-              type="text"
-              label="Protocollo"
-              id="formProtocollo"
-              value={verbale ? verbale.protocollo : ""}
+          {/* Pulsanti azioni */}
+          <ActionBar>
+            <PagoPaButton
+              small
+              onClick={openPagopaPagamenti}
+              loading={pagamentoInCorso}
             />
-          </div>
-          <div className="col col-md-6">
-            <h6 style={{ marginBottom: 15 }}>Documentale</h6>
-            {documentiVerbale.length > 0 ? (
-              documentiVerbale.map((item) => (
-                <MyButton
-                  onClick={(e) => scaricaFile(e, item)}
-                  type="submit"
-                  color="primary"
-                  title={`Scarica ${item.title}`}
-                  disabled={false}
-                ></MyButton>
-              ))
-            ) : (
-              <MyInput
-                type="text"
-                id="nessunDocumento"
-                value={"Nessun documento"}
-              />
-            )}
-          </div>
-        </div>
-        <h6 style={{ marginBottom: 10 }}>Informazioni zona</h6>
-        <div className="form-row" style={{ height: "80px" }}>
-          <MyInput
-            type="text"
-            label="Amministrazione verbale"
-            id="formAmministrazione verbale"
-            value={amministrazione}
-            wrapperClass="col col-md-6"
-          />
-        </div>
-        <h6 style={{ marginBottom: 15 }}>Informazioni blocchettario</h6>
-        <div className="form-row" style={{ height: "100px" }}>
-          <MyInput
-            type="text"
-            label="Numero"
-            id="Numero"
-            wrapperClass="col"
-            value={verbale ? verbale.numeroserie : ""}
-          />
-          <MyInput
-            type="text"
-            label="Serie"
-            id="Serie"
-            wrapperClass="col"
-            value={verbale ? verbale.blocchettario.serie : ""}
-          />
-        </div>
-        <div className="form-row" style={{ height: "90px" }}>
-          <MyInput
-            type="text"
-            label="Descrizione"
-            id="Descrizione"
-            wrapperClass="col"
-            value={verbale ? verbale.blocchettario.descrizione : ""}
-          />
-        </div>
-        <h6 style={{ marginBottom: 15 }}>Informazioni veicolo</h6>
-        <div className="form-row" style={{ height: "90px" }}>
-          <MyInput
-            type="text"
-            label="Targa"
-            id="Targa"
-            wrapperClass="col"
-            value={verbale ? verbale.targaveicolo : ""}
-          />
-          <MyInput
-            type="text"
-            label="Tipo targa"
-            id="Tipo targa"
-            wrapperClass="col"
-            value={verbale ? verbale.tipotarga : ""}
-          />
-          <MyInput
-            type="text"
-            label="Tipo veicolo"
-            id="Tipo veicolo"
-            wrapperClass="col"
-            value={verbale ? verbale.tipoveicolo : ""}
-          />
-        </div>
-        {verbale && verbale.proprietario ? (
-          <div>
-            <h6 style={{ marginBottom: 15 }}>Informazioni proprietario</h6>
-            <div className="form-row" style={{ height: "100px" }}>
-              <MyInput
-                type="text"
-                label="Nome e cognome"
-                id="Nome e cognome"
-                wrapperClass="col"
-                value={
-                  verbale &&
-                  verbale.proprietario &&
-                  verbale.proprietario.nome &&
-                  verbale.proprietario.cognome
-                    ? `${verbale.proprietario.nome} ${verbale.proprietario.cognome}`
-                    : `${verbale.proprietario.ragione_sociale}`
-                }
-              />
-              <MyInput
-                type="text"
-                label="Codice fiscale"
-                id="Codice fiscale"
-                wrapperClass="col"
-                value={
-                  verbale &&
-                  verbale.proprietario &&
-                  verbale.proprietario.codfiscale
-                    ? verbale.proprietario.codfiscale
-                    : ""
-                }
-              />
-              <MyInput
-                type="text"
-                label="Data di nascita"
-                id="Data di nascita"
-                wrapperClass="col"
-                value={
-                  verbale &&
-                  verbale.proprietario &&
-                  verbale.proprietario.data_nascita
-                    ? verbale.proprietario.data_nascita
-                        .replace(/-/g, "/")
-                        .split("/")
-                        .reverse()
-                        .join("/")
-                    : ""
-                }
-              />
-            </div>{" "}
-          </div>
-        ) : (
-          <MyAlert
-            color="danger"
-            title={"Nessuna informazione per il Proprietario!"}
-          ></MyAlert>
-        )}
 
-        {verbale && verbale.tutore ? (
-          <div>
-            <h6 style={{ marginBottom: 15 }}>Informazioni tutore</h6>
-            <div className="form-row" style={{ height: "100px" }}>
-              <MyInput
-                type="text"
-                label="Nome e cognome"
-                id="Nome e cognome"
-                wrapperClass="col"
-                value={
-                  verbale &&
-                  verbale.tutore &&
-                  verbale.tutore.nome &&
-                  verbale.tutore.cognome
-                    ? `${verbale.tutore.nome} ${verbale.tutore.cognome}`
-                    : `${verbale.tutore.ragione_sociale}`
-                }
-              />
-              <MyInput
-                type="text"
-                label="Codice fiscale"
-                id="Codice fiscale"
-                wrapperClass="col"
-                value={
-                  verbale && verbale.tutore && verbale.tutore.codfiscale
-                    ? verbale.tutore.codfiscale
-                    : ""
-                }
-              />
-              <MyInput
-                type="text"
-                label="Data di nascita"
-                id="Data di nascita"
-                wrapperClass="col"
-                value={
-                  verbale && verbale.tutore && verbale.tutore.data_nascita
-                    ? verbale.tutore.data_nascita
-                        .replace(/-/g, "/")
-                        .split("/")
-                        .reverse()
-                        .join("/")
-                    : ""
-                }
-              />
-            </div>{" "}
-          </div>
-        ) : (
-          <MyAlert
-            color="danger"
-            title={" Nessuna informazione per il Tutore!"}
-          ></MyAlert>
-        )}
+            <button
+              className={btnCls()}
+              onClick={openRichiestaRateizzazione}
+              disabled={azioniBloccate}
+            >
+              <CalendarEvent /> Richiedi rateizzazione
+            </button>
 
-        {verbale && verbale.trasgressore ? (
-          <div>
-            <h6 style={{ marginBottom: 15 }}>Informazioni trasgressore</h6>
-            <div className="form-row" style={{ height: "90px" }}>
-              <MyInput
-                type="text"
-                label="Nome e cognome"
-                id="Nome e cognome"
-                wrapperClass="col"
-                value={
-                  verbale &&
-                  verbale.trasgressore &&
-                  verbale.trasgressore.nome &&
-                  verbale.trasgressore.cognome
-                    ? `${verbale.trasgressore.nome} ${verbale.trasgressore.cognome}`
-                    : `${verbale.trasgressore.ragione_sociale}`
-                }
-              />
-              <MyInput
-                type="text"
-                label="Codice fiscale"
-                id="Codice fiscale"
-                wrapperClass="col"
-                value={
-                  verbale &&
-                  verbale.trasgressore &&
-                  verbale.trasgressore.codfiscale
-                    ? verbale.trasgressore.codfiscale
-                    : ""
-                }
-              />
-              <MyInput
-                type="text"
-                label="Data di nascita"
-                id="Data di nascita"
-                wrapperClass="col"
-                value={
-                  verbale &&
-                  verbale.trasgressore &&
-                  verbale.trasgressore.data_nascita
-                    ? verbale.trasgressore.data_nascita
-                        .replace(/-/g, "/")
-                        .split("/")
-                        .reverse()
-                        .join("/")
-                    : ""
-                }
-              />
-            </div>{" "}
-          </div>
-        ) : (
-          <MyAlert
-            color="danger"
-            title={"Nessuna informazione per il Trasgressore!"}
-          ></MyAlert>
-        )}
-        {verbale &&
-          verbale.violazioni.map((item) => (
-            <div>
-              <h6 style={{ marginBottom: 15 }}>Informazioni violazioni</h6>
-              <MyRow>
-                <MyCol>
-                  <MyTextArea
-                    rows={3}
-                    label="Descrizione"
-                    placeholder="Descrizione"
-                    value={item.descrizione}
-                  />
-                </MyCol>
-                <MyCol>
-                  <MyInput
-                    type="text"
-                    label="Imp. Ridotto"
-                    id="Imp. Ridotto"
-                    wrapperClass="col"
-                    value={`€ ${item.importoridotto}`}
-                  />
-                  <MyInput
-                    type="text"
-                    label="Imp. Ruoli"
-                    id="Imp. Ruoli"
-                    wrapperClass="col"
-                    value={`€ ${item.importoruolo}`}
-                  />
-                  <MyInput
-                    type="text"
-                    label="Punti"
-                    id="Punti"
-                    wrapperClass="col"
-                    value={item.punti || "no punti"}
-                  />
-                </MyCol>
-              </MyRow>
-              <div className="form-row" style={{ height: "100px" }}>
-                <MyInput
-                  type="text"
-                  label="Tot. Imp. Ruolo"
-                  id="Tot. Imp. Ruolo"
-                  wrapperClass="col"
-                  value={`€ ${
-                    verbale
-                      ? verbale.violazioni
-                          .filter((item) => item.importoruolo)
-                          .reduce(
-                            (partialSum, a) => partialSum + a.importoruolo,
-                            0
-                          )
-                          .toFixed(2)
-                          .replace(".", ",")
-                      : ""
-                  }`}
-                />
-                <MyInput
-                  type="text"
-                  label="Tot. Imp. Ridotto"
-                  id="Tot. Imp. Ridotto"
-                  wrapperClass="col"
-                  value={`€ ${
-                    verbale
-                      ? verbale.violazioni
-                          .filter((item) => item.importoridotto)
-                          .reduce(
-                            (partialSum, a) => partialSum + a.importoridotto,
-                            0
-                          )
-                          .toFixed(2)
-                          .replace(".", ",")
-                      : ""
-                  }`}
-                />
-              </div>
+            <button
+              className={btnCls()}
+              onClick={openModuloDatiConducente}
+              disabled={controlloModulo}
+            >
+              <PersonBadge /> Inserisci dati conducente
+            </button>
+
+            <button
+              className={btnCls()}
+              onClick={() => setShowInfoSana(!showInfoSana)}
+              aria-expanded={showInfoSana}
+            >
+              <Megaphone /> Visualizza ricorso Prefettura
+            </button>
+
+            <button
+              className={btnCls("danger")}
+              onClick={openRichiestaAnnullamento}
+              disabled={azioniBloccate}
+            >
+              <Flag /> Segnala anomalia
+            </button>
+          </ActionBar>
+
+          {errorePagamento ? (
+            <div className="alert alert-danger" role="alert">
+              {errorePagamento}
             </div>
-          ))}
-        <h6 style={{ marginBottom: 15 }}>Comunicazioni dati conducente</h6>
-        <div className="form-row" style={{ height: "100px" }}>
-          <MyInput
-            type="text"
-            label="Data Presentazione Documenti"
-            id="Data Presentazione Documenti"
-            wrapperClass="col"
-            value={
-              verbale
-                ? moment(verbale.data_presentazione_documenti)
-                    .format("DD-MM-YYYY")
-                    .replace(/-/g, "/") || "no data"
-                : ""
-            }
-          />
-        </div>
-        {verbale && verbale.pagamenti && verbale.pagamenti.length > 0 ? (
-          verbale.pagamenti.map((item) => (
-            <div>
-              <h6 style={{ marginBottom: 15 }}>Pagamento</h6>
-              <div className="form-row" style={{ height: "100px" }}>
-                <MyInput
-                  type="text"
-                  label="Data Pagamento"
-                  id="Data Pagamento"
-                  wrapperClass="col"
-                  value={
-                    moment(item.data_pagamento)
-                      .format("DD-MM-YYYY")
-                      .replace(/-/g, "/") || "no data"
-                  }
-                />
-                <MyInput
-                  type="text"
-                  label="Importo Pagato"
-                  id="Importo Pagato"
-                  wrapperClass="col"
-                  value={`€ ${
-                    item.importo_pagato.toFixed(2).replace(".", ",") ||
-                    "no data"
-                  }`}
-                />
-                <MyInput
-                  type="text"
-                  label="Metodo di Pagamento"
-                  id="Metodo di Pagamento"
-                  wrapperClass="col"
-                  value={item.metodo_pagamento || "no data"}
-                />
-                <MyInput
-                  type="text"
-                  label="Estremi Pagamento"
-                  id="Estremi Pagamento"
-                  wrapperClass="col"
-                  value={item.estremi_pagamento || ""}
-                />
-              </div>
-            </div>
-          ))
-        ) : (
-          <MyAlert color="danger" title={"Non esistono Pagamenti!"}></MyAlert>
-        )}
+          ) : null}
 
-        {verbale && verbale.notifiche && verbale.notifiche.length > 0 ? (
-          <div>
-            {verbale.notifiche.map((item) => (
-              <div>
-                <h6 style={{ marginBottom: 15 }}>Notifica</h6>
-                <div className="form-row" style={{ height: "100px" }}>
-                  <MyInput
-                    type="text"
-                    label="Data Notifica"
-                    id="Data Notifica"
-                    wrapperClass="col"
-                    value={
-                      moment(item.data_notifica)
-                        .format("DD-MM-YYYY")
-                        .replace(/-/g, "/") || "no data"
-                    }
-                  />
-                  <MyInput
-                    type="text"
-                    label="Tipo"
-                    id="Tipo"
-                    wrapperClass="col"
-                    value={item.tipo_notifica || "no data"}
-                  />
-                  <MyInput
-                    type="text"
-                    label="Soggetto"
-                    id="Soggetto"
-                    wrapperClass="col"
-                    value={item.tipo_anagrafica || "no data"}
-                  />
+          {showInfoSana ? (
+            <EmailPrompt>
+              <div className="d-flex align-items-start" style={{ gap: 12 }}>
+                <InfoCircle className="flex-shrink-0 mt-1" />
+                <div>
+                  <p className="font-weight-bold mb-1">Informazioni SANA</p>
+                  <p className="mb-1">
+                    Attraverso il portale SANA potrà visualizzare il ricorso
+                    presentato alla Prefettura riferito alla sanzione
+                    amministrativa notificata.
+                  </p>
+                  <p className="mb-2">
+                    Una volta aperto il portale dovrà cliccare sulla voce
+                    “Sistema informativo sanzionatorio amministrativo delle
+                    Prefetture”, poi “SANA – per il cittadino” ed inserire i
+                    dati inerenti al ricorso.
+                  </p>
+                  <button
+                    type="button"
+                    className={btnCls("primary")}
+                    onClick={openSana}
+                  >
+                    Vai al sito <ArrowRight />
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        ) : (
-          <MyAlert color="danger" title={"Non esistono Notifiche!"}></MyAlert>
-        )}
+            </EmailPrompt>
+          ) : null}
 
-        {verbale && verbale.ricorsi && verbale.ricorsi.length > 0 ? (
-          <div>
-            {verbale.ricorsi.map((item) => (
-              <div>
-                <h6 style={{ marginBottom: 15 }}>Ricorso</h6>
-                <div className="form-row" style={{ height: "100px" }}>
-                  <MyInput
-                    type="text"
-                    label="Data Ricorso"
-                    id="Data Ricorso"
-                    wrapperClass="col"
-                    value={
-                      item.data_inserimento
-                        ? moment(item.data_inserimento)
-                            .format("DD-MM-YYYY")
-                            .replace(/-/g, "/")
-                        : ""
-                    }
-                  />
-                  <MyInput
-                    type="text"
-                    label="Ente"
-                    id="Ente"
-                    wrapperClass="col"
-                    value={item.ente || ""}
-                  />
-                  <MyInput
-                    type="text"
-                    label="Soggetto"
-                    id="Soggetto"
-                    wrapperClass="col"
-                    value={item.soggetto_id || ""}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <MyAlert color="danger" title={"Non esistono Ricorsi!"}></MyAlert>
-        )}
+          <SectionGrid>
+            {/* Violazioni e importi */}
+            <Section
+              icon={ExclamationTriangle}
+              title="Violazioni contestate"
+              count={violazioniVerbale.length}
+              full
+            >
+              {violazioniVerbale.length > 0 ? (
+                <>
+                  {violazioniVerbale.map((item, index) => (
+                    <Violation
+                      key={index}
+                      index={index + 1}
+                      description={item.descrizione}
+                      chips={[
+                        {
+                          label: "Ridotto",
+                          value: formatEuro(item.importoridotto || 0),
+                        },
+                        {
+                          label: "Ruolo",
+                          value: formatEuro(item.importoruolo || 0),
+                        },
+                        {
+                          label: "Punti",
+                          value: item.punti ? `−${item.punti}` : "",
+                          warn: true,
+                        },
+                      ]}
+                    />
+                  ))}
+                  <SubBlock title="Totali">
+                    <Totals
+                      tiles={[
+                        {
+                          label: "Totale importo ridotto",
+                          value: formatEuro(totaleRidotto),
+                          accent: true,
+                        },
+                        {
+                          label: "Totale importo ruolo",
+                          value: formatEuro(totaleRuolo),
+                        },
+                        {
+                          label: "Punti decurtati",
+                          value: totalePunti ? String(totalePunti) : "0",
+                        },
+                      ]}
+                    />
+                  </SubBlock>
+                </>
+              ) : (
+                <EmptyNote>Nessuna violazione presente.</EmptyNote>
+              )}
+            </Section>
 
-        <h6 style={{ marginBottom: 15 }}>
-          Immatricolazione - Revisione - Assicurazione
-        </h6>
-        <div className="form-row" style={{ height: "100px" }}>
-          <MyInput
-            type="text"
-            label="Data Immatricolazione"
-            id="Data Immatricolazione"
-            wrapperClass="col"
-            value={
-              verbale && verbale.dataimmatricolazione
-                ? moment(verbale.dataimmatricolazione)
-                    .format("DD-MM-YYYY")
-                    .replace(/-/g, "/")
-                : ""
-            }
-          />
-          <MyInput
-            type="text"
-            label="Data Scadenza Revisione"
-            id="Data Scadenza Revisione"
-            wrapperClass="col"
-            value={
-              verbale && verbale.datarevisione
-                ? moment(verbale.datarevisione)
-                    .format("DD-MM-YYYY")
-                    .replace(/-/g, "/")
-                : ""
-            }
-          />
-          <MyInput
-            type="text"
-            label="Data Scadenza Assicurazione"
-            id="Data Scadenza Assicurazione"
-            wrapperClass="col"
-            value={
-              verbale && verbale.dataassicurazione
-                ? moment(verbale.dataassicurazione)
-                    .format("DD-MM-YYYY")
-                    .replace(/-/g, "/")
-                : ""
-            }
-          />
-        </div>
-      </div>
+            {/* Veicolo */}
+            <Section icon={CarFront} title="Veicolo">
+              <InfoGrid
+                items={[
+                  {
+                    label: "Targa",
+                    value: verbale.targaveicolo ? (
+                      <Plate value={verbale.targaveicolo} />
+                    ) : (
+                      ""
+                    ),
+                  },
+                  { label: "Tipo targa", value: verbale.tipotarga },
+                  { label: "Tipo veicolo", value: verbale.tipoveicolo },
+                  {
+                    label: "Immatricolazione",
+                    value: formatDate(verbale.dataimmatricolazione),
+                  },
+                  {
+                    label: "Scadenza revisione",
+                    value: formatDate(verbale.datarevisione),
+                  },
+                  {
+                    label: "Scadenza assicurazione",
+                    value: formatDate(verbale.dataassicurazione),
+                  },
+                ]}
+              />
+            </Section>
+
+            {/* Documenti */}
+            <Section
+              icon={FileEarmarkText}
+              title="Documenti"
+              count={documentiVerbale.length}
+            >
+              {documentiVerbale.length > 0 ? (
+                <DocumentList
+                  icon={FileEarmarkText}
+                  actionIcon={Download}
+                  docs={documentiVerbale.map((item, index) => ({
+                    key: item.id || index,
+                    name: item.title,
+                    onClick: (e) => scaricaFile(e, item),
+                  }))}
+                />
+              ) : (
+                <EmptyNote>Nessun documento disponibile.</EmptyNote>
+              )}
+            </Section>
+
+            {/* Blocchettario */}
+            <Section icon={Journal} title="Blocchettario">
+              <InfoGrid
+                items={[
+                  { label: "Protocollo", value: verbale.protocollo, mono: true },
+                  { label: "Numero", value: verbale.numeroserie },
+                  { label: "Serie", value: verbale.blocchettario?.serie },
+                  {
+                    label: "Descrizione",
+                    value: verbale.blocchettario?.descrizione,
+                    full: true,
+                  },
+                ]}
+              />
+            </Section>
+
+            {/* Comunicazione dati conducente */}
+            <Section icon={PersonBadge} title="Comunicazione dati conducente">
+              <InfoGrid
+                items={[
+                  {
+                    label: "Data presentazione documenti",
+                    value:
+                      formatDate(verbale.data_presentazione_documenti) ||
+                      "Non ancora presentati",
+                  },
+                ]}
+              />
+            </Section>
+
+            {/* Soggetti */}
+            <Section icon={People} title="Soggetti" full>
+              <SubBlock title="Proprietario">
+                {verbale.proprietario ? (
+                  <InfoGrid items={soggettoItems(verbale.proprietario)} />
+                ) : (
+                  <EmptyNote>Nessuna informazione per il proprietario.</EmptyNote>
+                )}
+              </SubBlock>
+              <SubBlock title="Trasgressore">
+                {verbale.trasgressore ? (
+                  <InfoGrid items={soggettoItems(verbale.trasgressore)} />
+                ) : (
+                  <EmptyNote>Nessuna informazione per il trasgressore.</EmptyNote>
+                )}
+              </SubBlock>
+              <SubBlock title="Tutore">
+                {verbale.tutore ? (
+                  <InfoGrid items={soggettoItems(verbale.tutore)} />
+                ) : (
+                  <EmptyNote>Nessun tutore associato.</EmptyNote>
+                )}
+              </SubBlock>
+            </Section>
+
+            {/* Pagamenti */}
+            <Section
+              icon={CashCoin}
+              title="Pagamenti"
+              count={verbale.pagamenti?.length}
+              full
+              flush
+            >
+              <MiniTable
+                empty="Non risultano pagamenti registrati."
+                rows={verbale.pagamenti}
+                columns={[
+                  {
+                    key: "data",
+                    label: "Data",
+                    render: (p) => formatDate(p.data_pagamento),
+                  },
+                  {
+                    key: "importo",
+                    label: "Importo",
+                    render: (p) => <strong>{formatEuro(p.importo_pagato)}</strong>,
+                  },
+                  {
+                    key: "metodo",
+                    label: "Metodo",
+                    render: (p) => p.metodo_pagamento,
+                  },
+                  {
+                    key: "estremi",
+                    label: "Estremi",
+                    render: (p) => p.estremi_pagamento,
+                  },
+                ]}
+              />
+            </Section>
+
+            {/* Notifiche */}
+            <Section
+              icon={Bell}
+              title="Notifiche"
+              count={verbale.notifiche?.length}
+              flush
+            >
+              <MiniTable
+                empty="Non risultano notifiche."
+                rows={verbale.notifiche}
+                columns={[
+                  {
+                    key: "data",
+                    label: "Data",
+                    render: (n) => formatDate(n.data_notifica),
+                  },
+                  { key: "tipo", label: "Tipo", render: (n) => n.tipo_notifica },
+                  {
+                    key: "soggetto",
+                    label: "Soggetto",
+                    render: (n) => n.tipo_anagrafica,
+                  },
+                ]}
+              />
+            </Section>
+
+            {/* Ricorsi */}
+            <Section
+              icon={Megaphone}
+              title="Ricorsi"
+              count={verbale.ricorsi?.length}
+              flush
+            >
+              <MiniTable
+                empty="Non risultano ricorsi."
+                rows={verbale.ricorsi}
+                columns={[
+                  {
+                    key: "data",
+                    label: "Data",
+                    render: (r) => formatDate(r.data_inserimento),
+                  },
+                  { key: "ente", label: "Ente", render: (r) => r.ente },
+                  {
+                    key: "soggetto",
+                    label: "Soggetto",
+                    render: (r) => r.soggetto_id,
+                  },
+                ]}
+              />
+            </Section>
+          </SectionGrid>
+
+          <FooterActions>
+            <button type="button" className={btnCls()} onClick={goHome}>
+              <HouseDoor />
+              Cambia tipo di verbale
+            </button>
+            <button
+              type="button"
+              className={btnCls("primary")}
+              onClick={nuovaRicerca}
+            >
+              Nuova ricerca
+            </button>
+          </FooterActions>
+        </PageShell>
+      )}
       <Footer />
     </div>
   );

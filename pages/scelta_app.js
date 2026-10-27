@@ -5,110 +5,101 @@ import "typeface-roboto-mono";
 import "typeface-lora";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import { useState } from "react";
-import { Button, Row, Col, Container, Icon } from "design-react-kit"; // Importazione dei componenti DRK
+import {
+  ArrowRight,
+  CarFront,
+  Download,
+  FileEarmarkText,
+  InfoCircle,
+} from "react-bootstrap-icons";
+import { MANUALE_URL } from "../components/AccessoVerbale";
+import styles from "../styles/Portale.module.css";
 
 const MyHeader = dynamic(() => import("../components/MyHeader"), {
   ssr: false,
 });
 
-// Importiamo il Footer sapendo che usa design-react-kit
 const Footer = dynamic(() => import("../components/Footer"), {
   ssr: false,
 });
 
+const scelte = [
+  {
+    tipo: "cds",
+    href: "/login",
+    icon: CarFront,
+    title: "Verbale Codice della Strada",
+    text: "Infrazioni al codice della strada: consulta il verbale, i punti decurtati, i documenti e paga con pagoPA.",
+  },
+  {
+    tipo: "sanzioni",
+    href: "/login_am",
+    icon: FileEarmarkText,
+    title: "Verbale Sanzioni Amministrative",
+    text: "Violazioni di regolamenti e ordinanze comunali e altre sanzioni amministrative.",
+  },
+];
+
 const SelectionPage = () => {
   const router = useRouter();
 
-  const [tipo, setTipo] = useState(null);
-
-  const handleCodiceStrada = () => {
-    setTipo("cds");
+  function scegli(scelta) {
     if (typeof window !== "undefined")
-      localStorage.setItem("tipoRicerca", "cds");
-    router.push("/login");
-  };
-
-  const handleSanzioniAmministrative = () => {
-    setTipo("sanzioni");
-    if (typeof window !== "undefined")
-      localStorage.setItem("tipoRicerca", "sanzioni");
-    router.push("/login_am");
-  };
+      localStorage.setItem("tipoRicerca", scelta.tipo);
+    router.push(scelta.href);
+  }
 
   return (
-    // Contenitore principale: d-flex flex-column min-vh-100 per lo Sticky Footer
+    // Sticky footer: il contenuto centrale occupa lo spazio rimanente
     <div className="d-flex flex-column min-vh-100">
-      <MyHeader
-        title={
-          tipo === "cds"
-            ? "Portale cittadino CDS"
-            : tipo === "sanzioni"
-            ? "Portale cittadino sanzioni amministrative"
-            : "Portale cittadino"
-        }
-      />
+      <MyHeader title="Portale cittadino" />
 
-      {/* Contenitore centrale: flex-grow-1 per occupare lo spazio rimanente */}
-      <Container className="d-flex flex-column align-items-center justify-content-center flex-grow-1 py-5">
-        <div className="text-center mb-5">
-          <h1 className="mb-3">Seleziona il tipo di verbale</h1>
-          <p className="text-muted">
-            Scegli la tipologia di verbale che desideri consultare
-          </p>
+      <main className={styles.page}>
+        <div className={`container ${styles.inner}`}>
+          <div className={styles.intro}>
+            <span className={styles.eyebrow}>Atti online</span>
+            <h1 className={styles.title}>Consulta il tuo verbale</h1>
+            <p className={styles.subtitle}>
+              Scegli la tipologia di verbale ricevuto: potrai inserire il codice
+              univoco e visualizzarne tutti i dettagli.
+            </p>
+          </div>
+
+          <div className={styles.choices}>
+            {scelte.map(({ icon: Icon, ...scelta }) => (
+              <button
+                key={scelta.tipo}
+                type="button"
+                className={styles.choice}
+                onClick={() => scegli(scelta)}
+              >
+                <span className={styles.choiceIcon}>
+                  <Icon size={22} />
+                </span>
+                <span className={styles.choiceTitle}>{scelta.title}</span>
+                <span className={styles.choiceText}>{scelta.text}</span>
+                <span className={styles.choiceCta}>
+                  Accedi <ArrowRight />
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className={styles.help}>
+            <span className={styles.helpIcon}>
+              <InfoCircle size={16} />
+            </span>
+            <div className={styles.helpText}>
+              <strong>Dove trovo il codice univoco?</strong>
+              È riportato sul verbale notificato. Per una guida passo passo
+              consulta il manuale d&apos;uso.
+            </div>
+            <a href={MANUALE_URL} download className={styles.helpBtn}>
+              <Download /> Scarica manuale
+            </a>
+          </div>
         </div>
-
-        {/* Uso del componente Row e Col di design-react-kit */}
-        <Row className="w-100" style={{ maxWidth: "800px" }}>
-          {/* Pulsante 1: Codice della Strada */}
-          <Col md={6} className="mb-4 mb-md-0">
-            <Button
-              color="primary" // Corrisponde a btn-primary
-              size="lg" // Corrisponde a btn-lg
-              className="w-100 py-4"
-              onClick={handleCodiceStrada}
-              style={{ height: "180px" }}
-            >
-              <div className="d-flex flex-column align-items-center justify-content-center h-100">
-                {/* Uso del componente Icon di design-react-kit */}
-                <Icon
-                  icon="it-calendar" // L'icona è it-calendar
-                  className="icon-white icon-xl mb-3"
-                  aria-hidden="true"
-                />
-                <span className="h5 mb-2">Verbale Codice della Strada</span>
-                <small className="text-white-50">
-                  Infrazioni al codice della strada
-                </small>
-              </div>
-            </Button>
-          </Col>
-
-          {/* Pulsante 2: Sanzioni Amministrative */}
-          <Col md={6}>
-            <Button
-              color="secondary" // Corrisponde a btn-secondary
-              size="lg" // Corrisponde a btn-lg
-              className="w-100 py-4"
-              onClick={handleSanzioniAmministrative}
-              style={{ height: "180px" }}
-            >
-              <div className="d-flex flex-column align-items-center justify-content-center h-100">
-                {/* Uso del componente Icon di design-react-kit */}
-                <Icon
-                  icon="it-file" // L'icona è it-file
-                  className="icon-white icon-xl mb-3"
-                  aria-hidden="true"
-                />
-                <span className="h5 mb-2">Verbale Sanzioni Amministrative</span>
-                <small className="text-white-50">
-                  Altre sanzioni amministrative
-                </small>
-              </div>
-            </Button>
-          </Col>
-        </Row>
-      </Container>
+      </main>
 
       <Footer />
     </div>
