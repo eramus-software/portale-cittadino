@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
 import "typeface-titillium-web";
 import "typeface-roboto-mono";
@@ -11,8 +11,10 @@ import {
   Download,
   FileEarmarkText,
   InfoCircle,
+  PersonBadge,
 } from "react-bootstrap-icons";
 import { MANUALE_URL } from "../components/AccessoVerbale";
+import { avviaLogin, completaLogin, cittadinoCorrente, esci } from "../utils/cie";
 import styles from "../styles/Portale.module.css";
 
 const MyHeader = dynamic(() => import("../components/MyHeader"), {
@@ -43,6 +45,29 @@ const scelte = [
 const SelectionPage = () => {
   const router = useRouter();
 
+  // Login CIE: il ritorno da eramus_ids arriva su questa pagina con ?code=…&state=…
+  const [cittadino, setCittadino] = useState(null);
+  const [erroreCie, setErroreCie] = useState(null);
+  const ritornoGestito = useRef(false);
+
+  useEffect(() => {
+    if (!router.isReady || ritornoGestito.current) return;
+    ritornoGestito.current = true;
+    setCittadino(cittadinoCorrente());
+
+    completaLogin(router.query).then((esito) => {
+      if (!esito) return;
+      if (esito.cittadino) setCittadino(esito.cittadino);
+      if (esito.errore) setErroreCie(esito.errore);
+      router.replace("/", undefined, { shallow: true });
+    });
+  }, [router.isReady]);
+
+  function esciCie() {
+    esci();
+    setCittadino(null);
+  }
+
   function scegli(scelta) {
     if (typeof window !== "undefined")
       localStorage.setItem("tipoRicerca", scelta.tipo);
@@ -63,6 +88,37 @@ const SelectionPage = () => {
               Scegli la tipologia di verbale ricevuto: potrai inserire il codice
               univoco e visualizzarne tutti i dettagli.
             </p>
+          </div>
+
+          <div className={`${styles.help} ${styles.cie}`}>
+            <span className={styles.helpIcon}>
+              <PersonBadge size={16} />
+            </span>
+            {cittadino ? (
+              <>
+                <div className={styles.helpText}>
+                  <strong>
+                    {cittadino.given_name} {cittadino.family_name}
+                  </strong>
+                  Hai effettuato l&apos;accesso con la Carta d&apos;Identità
+                  Elettronica.
+                </div>
+                <button type="button" className={styles.helpBtn} onClick={esciCie}>
+                  Esci
+                </button>
+              </>
+            ) : (
+              <>
+                <div className={styles.helpText}>
+                  <strong>Accedi con la tua identità digitale</strong>
+                  {erroreCie ||
+                    "Entra con la Carta d'Identità Elettronica (CIE)."}
+                </div>
+                <button type="button" className={styles.helpBtn} onClick={avviaLogin}>
+                  Entra con CIE
+                </button>
+              </>
+            )}
           </div>
 
           <div className={styles.choices}>

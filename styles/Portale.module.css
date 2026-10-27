@@ -154,6 +154,12 @@
   transform: translateX(3px);
 }
 
+/* ---------- Accesso con CIE (stesso riquadro della nota informativa) ---------- */
+
+.cie {
+  margin: 0 0 1.75rem;
+}
+
 /* ---------- Nota informativa ---------- */
 
 .help {
