@@ -129,22 +129,30 @@ const Verbale = () => {
     async function fetchData() {
       if (codiceVerbale != null && codiceVerbale != "") {
         const result = await getVerbale(codiceVerbale);
-        const modulo1 = await getModuloDatiById(result.id);
+        const modulo1 = await getModuloDatiById(result.id).catch((error) => {
+          console.error("Errore nel caricamento dei moduli conducente:", error);
+          return null;
+        });
         const documenti = await getDocumentiVerbale(codiceVerbale);
 
-        const controlloPunti = result.violazioni.find((item) => item.punti > 0);
-        const esisteAccettata = modulo1.moduli.some(
-          (m) => m?.tipo_lavorazione === "Accettata"
+        // Se i moduli non sono verificabili il pulsante resta disabilitato
+        const moduliVerificati = Array.isArray(modulo1?.moduli);
+        const moduli = moduliVerificati ? modulo1.moduli : [];
+        const controlloPunti = (result.violazioni || []).some(
+          (item) => Number(item?.punti) > 0
+        );
+        // Un nuovo modulo è consentito solo se tutti quelli già inviati sono
+        // stati rifiutati: uno in attesa (tipo_lavorazione null) o accettato blocca
+        const moduliTuttiRifiutati = moduli.every(
+          (m) => m?.tipo_lavorazione === "Rifiutata"
         );
 
         if (
-          (result.data_presentazione_documenti == undefined ||
-            modulo1.moduli.length === 0 || // ✅ Caso aggiunto: nessun modulo
-            (modulo1.moduli.length > 0 &&
-              modulo1.moduli[0]?.tipo_lavorazione === "Rifiutata")) &&
+          !result.data_presentazione_documenti &&
           controlloPunti &&
-          (result.eseguito126 === false || result.eseguito126 == undefined) &&
-          !esisteAccettata // ❗️ Nessun modulo accettato
+          result.eseguito126 !== true &&
+          moduliVerificati &&
+          moduliTuttiRifiutati
         ) {
           setControlloModulo(false);
         }
