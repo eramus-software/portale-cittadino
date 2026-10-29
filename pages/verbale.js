@@ -305,7 +305,7 @@ const Verbale = () => {
             <button
               className={btnCls()}
               onClick={openModuloDatiConducente}
-              disabled={controlloModulo}
+              disabled={controlloModulo || verbale.eseguito126 === true}
             >
               <PersonBadge /> Inserisci dati conducente
             </button>
